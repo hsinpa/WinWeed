@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Hsinpa.Winweed {
+namespace Hsinpa.Winweed
+{
     public class GrassMesh
     {
 
@@ -11,88 +10,133 @@ namespace Hsinpa.Winweed {
         private MeshStruct m_meshStruct;
         private float m_height;
         private float m_width;
+        private float m_width_radius;
 
-        private int m_subdivide;
+        private int m_segment;
+
+        private const int VERTICE_BASE = 2;
+        private const int TRI_PART = 3;
+
+        private float height_plus_tri => this.m_height + (0.2f * this.m_height);
 
         public GrassMesh() {
             this.m_meshStruct = new MeshStruct();
         }
 
-        public Mesh CreateMesh(float height, float width, int subdivide) {
-            Mesh m = new Mesh();
+        public Mesh CreateMesh(float height, float width, int segment) {
+            Mesh mesh = new Mesh();
 
-            this.m_subdivide = subdivide;
+            this.m_segment = segment;
             this.m_width = width;
             this.m_height = height;
+            this.m_width_radius = width * 0.5f;
 
-            this.m_meshStruct = CreateTriVertice(this.m_meshStruct, height, width, subdivide);
+            this.m_meshStruct = CreateTriVertice(this.m_meshStruct, height, width, segment);
 
-            return m;
+            mesh.SetVertices(this.m_meshStruct.vertices);
+            mesh.SetIndices(this.m_meshStruct.triangles, MeshTopology.Triangles, 0);
+            mesh.SetUVs(0, CreateUV(this.m_meshStruct.vertices, floor: 0, top: height_plus_tri, left: -this.m_width_radius, right: this.m_width_radius));
+            mesh.RecalculateNormals();
+            return mesh;
         }
 
-        private MeshStruct CreateTriVertice(MeshStruct meshStruct, float height, float width, int subdivide) {
+        private MeshStruct CreateTriVertice(MeshStruct meshStruct, float height, float width, int segment) {
 
             Vector3 foot = new Vector3(0, 0, 0);
             Vector3 top = new Vector3(0, height, 0);
-            float segment_length = height / subdivide;
+
+            float segment_height = height / (segment);
             float width_radius = width * 0.5f;
 
+            int verticeLens = (VERTICE_BASE + (VERTICE_BASE * segment)) + 1; //2 => base, 2 => body increment, 1 => top triangle
 
-            int verticeLens = (4 + (2 * subdivide)) + 1; //4 => base, 2 => body increment, 1 => top triangle
             Vector3[] vertices = new Vector3[verticeLens];
 
-            int triangleLens = (6 + (6 * subdivide)) + 3; //4 => base, 2 => body increment, 1 => top triangle
+            int triangleLens = ((TRI_PART * 2 * segment)) + TRI_PART; //Square is form with two triangles
 
-            int[] triangles = new int[0];
+            int[] triangles = new int[triangleLens];
 
             vertices[0] = new Vector3(-width_radius, 0, 0);
             vertices[1] = new Vector3(width_radius, 0, 0);
 
+            Debug.Log("SegmentHeight " + segment_height);
+
+            Debug.Log("VerticeLengths " + verticeLens +", TriangleLengths " + triangleLens);
+
             //Build body
-            for (int i = 0; i < subdivide; i++) {
+            for (int i = 0; i < segment; i++) {
 
-                Vector3 A = vertices[0 + (i * 2)];
+                int A_Index = 0 + (i * VERTICE_BASE);
+                int B_Index = 1 + (i * VERTICE_BASE);
+                int C_Index = 2 + (i * VERTICE_BASE);
+                int D_Index = 3 + (i * VERTICE_BASE);
 
-                Vector3 B = vertices[1 + (i * 2)];
+                vertices[C_Index] = new Vector3(-width_radius, segment_height * (i + 1), 0);
+                vertices[D_Index] = new Vector3(width_radius, segment_height * (i + 1), 0);
 
-                Vector3 C = new Vector3(-width_radius, segment_length * (i +1), 0);
-                
-                Vector3 D = new Vector3(width_radius, segment_length * (i + 1), 0);
+                triangles[0 + (i * 6)] = A_Index;
+                triangles[1 + (i * 6)] = B_Index;
+                triangles[2 + (i * 6)] = C_Index;
 
-                vertices[2 + (i * 2)] = C;
-                vertices[3 + (i * 2)] = D;
-
-                triangles[0 + (i * 6)] = 0;
-                triangles[1 + (i * 6)] = 1;
-                triangles[2 + (i * 6)] = 2;
-
-                triangles[3 + (i * 6)] = 3;
-                triangles[4 + (i * 6)] = 4;
-                triangles[5 + (i * 6)] = 5;
-
+                triangles[3 + (i * 6)] = B_Index;
+                triangles[4 + (i * 6)] = D_Index;
+                triangles[5 + (i * 6)] = C_Index;
             }
 
-
             //Build head
+            vertices[verticeLens - 1] = new Vector3(0, height_plus_tri, 0);
+
+            triangles[triangleLens - 3] = verticeLens - 3;
+            triangles[triangleLens - 2] = verticeLens - 2;
+            triangles[triangleLens - 1] = verticeLens - 1;
+
+            //Debug.Log("Vertice");
+            //DebugArray(vertices);
+
+            //Debug.Log("Triangle");
+            //DebugArray(triangles);
+
+            meshStruct.vertices = vertices;
+            meshStruct.triangles = triangles;
 
             return meshStruct;
         }
 
-        private void CreateUV()
+        private Vector2[] CreateUV(Vector3[] vertices, float floor, float top, float left, float right)
         {
+            Vector2[] uv_array = new Vector2[vertices.Length];
 
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                uv_array[i] = new Vector2( UtilityFunc.NormalizeByRange(vertices[i].x, left, right),
+                                           UtilityFunc.NormalizeByRange(vertices[i].y, floor, top)
+                    );
+            }
+
+            return uv_array;
         }
 
-        private void CreateNormal() { 
-        
+        private Vector3[] CreateNormal(Vector3[] vertices) {
+            Vector3[] normal_array = new Vector3[vertices.Length];
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                normal_array[i] = new Vector3(0, 0, -1);
+            }
+
+            return normal_array;
         }
 
         public struct MeshStruct {
-            public Vector3[] position;
-            public int[] triangle;
+            public Vector3[] vertices;
+            public int[] triangles;
             public Vector2[] uv;
             public Vector3[] normal;
         }
 
+        private void DebugArray<T>(T[] array) {
+            foreach (T a in array)
+                Debug.Log(a.ToString());
+        }
     }
 }
