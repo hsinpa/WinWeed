@@ -17,13 +17,13 @@ namespace Hsinpa.Winweed
         private const int VERTICE_BASE = 2;
         private const int TRI_PART = 3;
 
-        private float height_plus_tri => this.m_height + (0.2f * this.m_height);
+        //private float height_plus_tri => this.m_height + (0.2f * this.m_height);
 
         public GrassMesh() {
             this.m_meshStruct = new MeshStruct();
         }
 
-        public Mesh CreateMesh(float height, float width, int segment) {
+        public Mesh CreateMesh(float height, float width, float sharpness, int segment) {
             Mesh mesh = new Mesh();
 
             this.m_segment = segment;
@@ -31,21 +31,21 @@ namespace Hsinpa.Winweed
             this.m_height = height;
             this.m_width_radius = width * 0.5f;
 
-            this.m_meshStruct = CreateTriVertice(this.m_meshStruct, height, width, segment);
+            this.m_meshStruct = CreateTriVertice(this.m_meshStruct, height, width, sharpness, segment);
 
             mesh.SetVertices(this.m_meshStruct.vertices);
             mesh.SetIndices(this.m_meshStruct.triangles, MeshTopology.Triangles, 0);
-            mesh.SetUVs(0, CreateUV(this.m_meshStruct.vertices, floor: 0, top: height_plus_tri, left: -this.m_width_radius, right: this.m_width_radius));
+            mesh.SetUVs(0, CreateUV(this.m_meshStruct.vertices, floor: 0, top: height, left: -this.m_width_radius, right: this.m_width_radius));
             mesh.RecalculateNormals();
             return mesh;
         }
 
-        private MeshStruct CreateTriVertice(MeshStruct meshStruct, float height, float width, int segment) {
+        private MeshStruct CreateTriVertice(MeshStruct meshStruct, float height, float width, float sharpness, int segment)
+        {
+            float blade_height = (sharpness * this.m_height);
+            float body_height = height - blade_height;
 
-            Vector3 foot = new Vector3(0, 0, 0);
-            Vector3 top = new Vector3(0, height, 0);
-
-            float segment_height = height / (segment);
+            float segment_height = body_height / (segment);
             float width_radius = width * 0.5f;
 
             int verticeLens = (VERTICE_BASE + (VERTICE_BASE * segment)) + 1; //2 => base, 2 => body increment, 1 => top triangle
@@ -84,7 +84,7 @@ namespace Hsinpa.Winweed
             }
 
             //Build head
-            vertices[verticeLens - 1] = new Vector3(0, height_plus_tri, 0);
+            vertices[verticeLens - 1] = new Vector3(0, body_height + blade_height, 0);
 
             triangles[triangleLens - 3] = verticeLens - 3;
             triangles[triangleLens - 2] = verticeLens - 2;
