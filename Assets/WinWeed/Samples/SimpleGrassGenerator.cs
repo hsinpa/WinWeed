@@ -7,6 +7,8 @@ namespace Hsinpa.Winweed.Sample
 {
     public class SimpleGrassGenerator : MonoBehaviour
     {
+
+        [Header("Basic Config")]
         [SerializeField]
         private Material material;
 
@@ -19,6 +21,12 @@ namespace Hsinpa.Winweed.Sample
         [SerializeField]
         private float grass_height;
 
+        [Header("Wind Config")]
+        [SerializeField]
+        private Vector3 wind_direction;
+
+        [SerializeField]
+        private float wind_strength;
 
         private GrassMesh _grassMesh;
         private const int SEGMENT = 2;
@@ -65,7 +73,9 @@ namespace Hsinpa.Winweed.Sample
 
             _grassBezierPoints = GBezierCurve.GenerateRandomCurve(height: grass_height, end_point_radius: 0.5f);
 
-            //this.m_PropertyBlock.SetFloat(WeedStatic.ShaderProperties.Height, height);
+            this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Wind_Direction, wind_direction.normalized);
+            this.m_PropertyBlock.SetFloat(WeedStatic.ShaderProperties.Wind_Strength, wind_strength);
+
             //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_StartPoint, _grassBezierPoints.start_point);
             //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_StartCtrl, _grassBezierPoints.start_ctrl);
             //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_EndPoint, _grassBezierPoints.end_point);
@@ -77,12 +87,13 @@ namespace Hsinpa.Winweed.Sample
             //Debug.Log($"End Ctrl {_grassBezierPoints.end_ctrl.x}, {_grassBezierPoints.end_ctrl.y}, {_grassBezierPoints.end_ctrl.z}");
 
             material.SetBuffer("_Properties", this.m_meshCommandBuffer);
+
             //_renderer.SetPropertyBlock(this.m_PropertyBlock);
         }
 
         private void Update()
         {
-            Graphics.DrawMeshInstancedIndirect(this.m_grassMesh, 0, material, this.m_bound, this.m_argsCommandBuffer);
+            Graphics.DrawMeshInstancedIndirect(this.m_grassMesh, 0, material, this.m_bound, this.m_argsCommandBuffer, properties: this.m_PropertyBlock);
         }
 
         private ComputeBuffer GetCommandShaderArg(Mesh grassMesh, int instance_count) {
