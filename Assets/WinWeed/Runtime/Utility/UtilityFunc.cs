@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Hsinpa.Winweed
+namespace Hsinpa.Winweed.Uti
 {
     public class UtilityFunc
     {

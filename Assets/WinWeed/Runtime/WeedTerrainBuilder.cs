@@ -9,20 +9,23 @@ namespace Hsinpa.Winweed
     {
         [SerializeField]
         private Vector2Int subdivide = Vector2Int.one;
+        public Vector2Int Subdivide => subdivide;
 
         [SerializeField]
         private Vector2 terrain_size = Vector2.one;
+        public Vector2 Terrain_Size => terrain_size;
 
         private void OnDrawGizmosSelected()
         {
+            float space = 0.9f;
             float grid_size_x = (terrain_size.x / subdivide.x);
             float grid_size_y = (terrain_size.y / subdivide.y);
 
-            float start_x = transform.position.x - (terrain_size.x * 0.5f);
-            float start_z = transform.position.z - (terrain_size.y * 0.5f);
-
-            float space = 0.95f;
             Vector3 gridSize = new Vector3(grid_size_x * space, 1, grid_size_y * space);
+
+            float start_x = transform.position.x - (terrain_size.x * 0.5f) + (gridSize.x * 0.5f);
+            float start_z = transform.position.z - (terrain_size.y * 0.5f) + (gridSize.z * 0.5f);
+
 
             for (int x = 0; x < subdivide.x; x++) {
                 for (int y = 0; y < subdivide.y; y++)

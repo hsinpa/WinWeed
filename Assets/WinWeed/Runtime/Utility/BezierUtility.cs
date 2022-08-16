@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hsinpa.Utility {
-    public class SnakeUtility
+    public class BezierUtility
     {
 
         public static Vector3 BezierCurve(Vector3 StartPoint, Vector3 StartCtrlPoint, Vector3 EndCtrlPoint, Vector3 EndPoint, float t)

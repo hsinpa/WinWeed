@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Hsinpa.Winweed.Uti;
 
 namespace Hsinpa.Winweed.Sample
 {
@@ -76,16 +76,6 @@ namespace Hsinpa.Winweed.Sample
             this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Wind_Direction, wind_direction.normalized);
             this.m_PropertyBlock.SetFloat(WeedStatic.ShaderProperties.Wind_Strength, wind_strength);
 
-            //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_StartPoint, _grassBezierPoints.start_point);
-            //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_StartCtrl, _grassBezierPoints.start_ctrl);
-            //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_EndPoint, _grassBezierPoints.end_point);
-            //this.m_PropertyBlock.SetVector(WeedStatic.ShaderProperties.Bezier_EndCtrl, _grassBezierPoints.end_ctrl);
-
-            //Debug.Log($"Start Point {_grassBezierPoints.start_point.x}, {_grassBezierPoints.start_point.y}, {_grassBezierPoints.start_point.z}");
-            //Debug.Log($"Start Ctrl {_grassBezierPoints.start_ctrl.x}, {_grassBezierPoints.start_ctrl.y}, {_grassBezierPoints.start_ctrl.z}");
-            //Debug.Log($"End Point {_grassBezierPoints.end_point.x}, {_grassBezierPoints.end_point.y}, {_grassBezierPoints.end_point.z}");
-            //Debug.Log($"End Ctrl {_grassBezierPoints.end_ctrl.x}, {_grassBezierPoints.end_ctrl.y}, {_grassBezierPoints.end_ctrl.z}");
-
             material.SetBuffer("_Properties", this.m_meshCommandBuffer);
 
             //_renderer.SetPropertyBlock(this.m_PropertyBlock);
@@ -147,23 +137,6 @@ namespace Hsinpa.Winweed.Sample
 
         private void OnDrawGizmosSelected()
         {
-            //    float radius = 0.05f;
-            //    Gizmos.color = Color.red;
-            //    Gizmos.DrawSphere(_grassBezierPoints.start_point, radius);
-            //    //Debug.Log($"Start Point {_grassBezierPoints.start_point.x}, {_grassBezierPoints.start_point.y}, {_grassBezierPoints.start_point.z}");
-
-            //    Gizmos.color = Color.gray;
-            //    Gizmos.DrawSphere(_grassBezierPoints.start_ctrl, radius);
-            //    //Debug.Log($"Start Ctrl {_grassBezierPoints.start_ctrl.x}, {_grassBezierPoints.start_ctrl.y}, {_grassBezierPoints.start_ctrl.z}");
-
-            //    Gizmos.color = Color.red;
-            //    Gizmos.DrawSphere(_grassBezierPoints.end_point, radius);
-            //    //Debug.Log($"End Point {_grassBezierPoints.end_point.x}, {_grassBezierPoints.end_point.y}, {_grassBezierPoints.end_point.z}");
-
-            //    Gizmos.color = Color.gray;
-            //    Gizmos.DrawSphere(_grassBezierPoints.end_ctrl, radius);
-            //    //Debug.Log($"End Ctrl {_grassBezierPoints.end_ctrl.x}, {_grassBezierPoints.end_ctrl.y}, {_grassBezierPoints.end_ctrl.z}");
-
             Gizmos.color = Color.gray;
             Gizmos.DrawWireCube(this.transform.position, boundingSize);
         }
