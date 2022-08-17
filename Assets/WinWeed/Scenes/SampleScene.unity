@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 481961003}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainSRP: {fileID: 11400000, guid: 86e04c8c15bc54144bd3efc97b0d0117, type: 2}
-  brush_weight: 0.656
+  brush_weight: 0
   mouseHoverColor: {r: 0.1, g: 0.6, b: 0.1, a: 1}
   mousePaintedColor: {r: 0, g: 0.8, b: 0.8, a: 1}
 --- !u!1 &705507993
@@ -450,8 +450,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
   boundingSize: {x: 5, y: 1, z: 5}
-  spawnInstanceCount: 100
+  spawnInstanceCount: 400
   grass_height: 1
+  terrainSRP: {fileID: 11400000, guid: 86e04c8c15bc54144bd3efc97b0d0117, type: 2}
   wind_direction: {x: 0.12, y: 0.12, z: 0.3}
   wind_strength: 1
 --- !u!1 &1777125096

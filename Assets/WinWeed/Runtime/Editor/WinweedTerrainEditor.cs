@@ -41,11 +41,10 @@ namespace Hsinpa.Winweed.EditorCode
             Event guiEvent = Event.current;
             if (lockInspectorFlag)
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
-
-            if (guiEvent.type == EventType.MouseDown)
+            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
                 _mouseClickFlag = true;
 
-            if (guiEvent.type == EventType.MouseUp)
+            if (guiEvent.type == EventType.MouseUp && guiEvent.button == 0)
                 _mouseClickFlag = false;
 
             Input(guiEvent);

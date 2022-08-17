@@ -21,6 +21,9 @@ namespace Hsinpa.Winweed.Sample
         [SerializeField]
         private float grass_height;
 
+        [SerializeField]
+        private TerrainSRP terrainSRP;
+
         [Header("Wind Config")]
         [SerializeField]
         private Vector3 wind_direction;
@@ -107,16 +110,21 @@ namespace Hsinpa.Winweed.Sample
             Quaternion rotation = Quaternion.identity;
             Vector3 scale = Vector3.one;
 
+            var paintStructList = terrainSRP.Terrains;
+
+
             for (int i = 0; i < instance_count; i++) {
                 var grassBezierPoints = GBezierCurve.GenerateRandomCurve(height: height, end_point_radius: 0.5f);
 
                 MeshProperties props = new MeshProperties();
 
-                float pos_x = (spawn_size.x  * 0.5f * UtilityFunc.RandomNegativeToOne()) + spawn_center.x;
-                float pos_y = spawn_center.y;
-                float pos_z = (spawn_size.z * 0.5f * UtilityFunc.RandomNegativeToOne()) + spawn_center.z;
+                Vector2 random2DPos = terrainSRP.GetRandom2DPosition(paintStructList, spawn_center);
 
-               // Debug.Log($"x {pos_x}, y {pos_y}, z {pos_z}");
+                float pos_x = random2DPos.x; //  (spawn_size.x  * 0.5f * UtilityFunc.RandomNegativeToOne()) + spawn_center.x;
+                float pos_y = spawn_center.y;
+                float pos_z = random2DPos.y; //(spawn_size.z * 0.5f * UtilityFunc.RandomNegativeToOne()) + spawn_center.z;
+
+                // Debug.Log($"x {pos_x}, y {pos_y}, z {pos_z}");
 
                 Vector3 position = new Vector3(pos_x, pos_y, pos_z);
                 props.a_mat = Matrix4x4.TRS(position, rotation, scale);

@@ -34,7 +34,7 @@ namespace Hsinpa.Winweed
 
         private void OnDrawGizmos()
         {
-            if (terrainSRP == null) return;
+            if (terrainSRP == null || Application.isPlaying) return;
             float space = 0.9f;
             float grid_size_x = (terrainSRP.Terrain_Size.x / terrainSRP.Subdivide.x);
             float grid_size_y = (terrainSRP.Terrain_Size.y / terrainSRP.Subdivide.y);

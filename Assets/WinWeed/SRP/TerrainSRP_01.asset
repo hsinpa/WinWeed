@@ -12,42 +12,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b127095d78fbb144ba3127a0768f1aa, type: 3}
   m_Name: TerrainSRP_01
   m_EditorClassIdentifier: 
-  subdivide: {x: 5, y: 5}
+  subdivide: {x: 10, y: 10}
   terrain_size: {x: 4, y: 4}
   _recordTerrains:
-    m_keys: 04000000090000000200000001000000060000000b0000000c0000000700000008000000030000000d0000001200000011000000000000000f0000000a00000005000000
+    m_keys: 040000000200000001000000030000000f0000000d000000000000000b0000000e000000050000000c0000000a0000001e0000003200000028000000140000001f00000029000000330000001500000016000000200000002a000000350000002b000000340000002100000017000000220000002c0000003600000018000000230000002d0000003700000019000000
     m_values:
     - index: {x: 4, y: 0}
-      weight: 0.656
-    - index: {x: 4, y: 1}
-      weight: 0.656
+      weight: 1
     - index: {x: 2, y: 0}
-      weight: 0.656
+      weight: 1
     - index: {x: 1, y: 0}
-      weight: 0.656
-    - index: {x: 1, y: 1}
-      weight: 0.656
-    - index: {x: 1, y: 2}
-      weight: 0.656
-    - index: {x: 2, y: 2}
-      weight: 0.51
-    - index: {x: 2, y: 1}
-      weight: 0.656
-    - index: {x: 3, y: 1}
-      weight: 0.656
+      weight: 1
     - index: {x: 3, y: 0}
-      weight: 0.656
-    - index: {x: 3, y: 2}
-      weight: 0.51
-    - index: {x: 3, y: 3}
-      weight: 0.51
-    - index: {x: 2, y: 3}
-      weight: 0.51
+      weight: 1
+    - index: {x: 5, y: 1}
+      weight: 1
+    - index: {x: 3, y: 1}
+      weight: 1
     - index: {x: 0, y: 0}
-      weight: 0.656
-    - index: {x: 0, y: 3}
-      weight: 0.656
-    - index: {x: 0, y: 2}
-      weight: 0.656
+      weight: 1
+    - index: {x: 1, y: 1}
+      weight: 1
+    - index: {x: 4, y: 1}
+      weight: 1
+    - index: {x: 5, y: 0}
+      weight: 1
+    - index: {x: 2, y: 1}
+      weight: 1
     - index: {x: 0, y: 1}
-      weight: 0.656
+      weight: 1
+    - index: {x: 0, y: 3}
+      weight: 1
+    - index: {x: 0, y: 5}
+      weight: 1
+    - index: {x: 0, y: 4}
+      weight: 1
+    - index: {x: 0, y: 2}
+      weight: 1
+    - index: {x: 1, y: 3}
+      weight: 1
+    - index: {x: 1, y: 4}
+      weight: 1
+    - index: {x: 1, y: 5}
+      weight: 1
+    - index: {x: 1, y: 2}
+      weight: 1
+    - index: {x: 2, y: 2}
+      weight: 1
+    - index: {x: 2, y: 3}
+      weight: 1
+    - index: {x: 2, y: 4}
+      weight: 1
+    - index: {x: 3, y: 5}
+      weight: 1
+    - index: {x: 3, y: 4}
+      weight: 1
+    - index: {x: 2, y: 5}
+      weight: 1
+    - index: {x: 3, y: 3}
+      weight: 1
+    - index: {x: 3, y: 2}
+      weight: 1
+    - index: {x: 4, y: 3}
+      weight: 1
+    - index: {x: 4, y: 4}
+      weight: 1
+    - index: {x: 4, y: 5}
+      weight: 1
+    - index: {x: 4, y: 2}
+      weight: 1
+    - index: {x: 5, y: 3}
+      weight: 1
+    - index: {x: 5, y: 4}
+      weight: 1
+    - index: {x: 5, y: 5}
+      weight: 1
+    - index: {x: 5, y: 2}
+      weight: 1
