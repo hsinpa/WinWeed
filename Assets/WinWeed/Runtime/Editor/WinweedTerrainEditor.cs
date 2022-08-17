@@ -6,11 +6,17 @@ using Hsinpa.Winweed;
 using Hsinpa.Winweed.Uti;
 namespace Hsinpa.Winweed.EditorCode
 {
+
+    [CustomPropertyDrawer(typeof(TerrainDictionary))]
+    public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
+
     [CustomEditor(typeof(WeedTerrainBuilder))]
     public class WinweedTerrainEditor : Editor
     {
         private WeedTerrainBuilder builder;
         private bool lockInspectorFlag = false;
+
+        private bool _mouseClickFlag = false; 
 
         public override void OnInspectorGUI()
         {
@@ -36,6 +42,11 @@ namespace Hsinpa.Winweed.EditorCode
             if (lockInspectorFlag)
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
+            if (guiEvent.type == EventType.MouseDown)
+                _mouseClickFlag = true;
+
+            if (guiEvent.type == EventType.MouseUp)
+                _mouseClickFlag = false;
 
             Input(guiEvent);
             //Draw(guiEvent);
@@ -50,13 +61,23 @@ namespace Hsinpa.Winweed.EditorCode
             Vector3 plane_normal = new Vector3(0, -1, 0);
 
             var actionResult = CollisionUti.IntersectionPlane(plane_position, plane_normal, mousePos, direction);
-
-            if (actionResult.valid) {
+            
+            if (actionResult.valid && builder.TerrainSRP != null) {
                 Vector2 uv = new Vector2(0, 0);
                 Vector3 landing_pos = mousePos + (direction * actionResult.t);
-                CollisionUti.GetPlaneIntersectUV(new Vector2(plane_position.x, plane_position.z), builder.Terrain_Size,
+                CollisionUti.GetPlaneIntersectUV(new Vector2(plane_position.x, plane_position.z), builder.TerrainSRP.Terrain_Size,
                                                  new Vector2(landing_pos.x, landing_pos.z), out uv);
 
+                builder.SetMouseUV(uv);
+                Vector2Int gridIndex = builder.TerrainSRP.GetGridIndexFromUV(uv);
+
+                if (_mouseClickFlag && gridIndex.x >= 0 && gridIndex.y >= 0 && lockInspectorFlag) {
+                    builder.TerrainSRP.PaintTerrain(new TerrainSRP.PaintedTerrainStruct() { index = gridIndex, weight = builder.Brush_Weight });
+
+                    EditorUtility.SetDirty(builder.TerrainSRP);
+                }
+
+                SceneView.RepaintAll();
                 //Debug.Log($"landing_pos {landing_pos.x}, {landing_pos.y}, {landing_pos.z}");
                 //Debug.Log($"UV {uv.x}, {uv.y}");
             }

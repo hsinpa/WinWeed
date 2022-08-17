@@ -38,5 +38,20 @@ namespace Hsinpa.Winweed.Uti
         {
             return value + 1 * 0.5f;
         }
+
+        public static Dictionary<T, K> SetDictionary<T, K>(Dictionary<T, K> dict, T key, K addValue)
+        {
+
+            if (dict.ContainsKey(key))
+            {
+                dict[key] = addValue;
+            }
+            else
+            {
+                dict.Add(key, addValue);
+            }
+
+            return dict;
+        }
     }
 }
