@@ -75,7 +75,7 @@ namespace Hsinpa.Winweed
             return (Subdivide.x * grid_y) + grix_x;
         }
 
-        public Vector2 GetRandom2DPosition(List<PaintedTerrainStruct> terrains, Vector3 centerPosition) {
+        public (Vector2, PaintedTerrainStruct) GetRandom2DPosition(List<PaintedTerrainStruct> terrains, Vector3 centerPosition) {
 
             int painted_terrain_count = terrains.Count;
             int random_terrain_index = UtilityFunc.RandomRange(0, painted_terrain_count);
@@ -93,10 +93,11 @@ namespace Hsinpa.Winweed
             float box_pos_x = start_x + (grid_size_x * terrains[random_terrain_index].index.x);
             float box_pos_y = start_z + (grid_size_y * terrains[random_terrain_index].index.y);
 
+
             float random_x_pos = UtilityFunc.RandomRange(box_pos_x - grid_size_half_x, box_pos_x + grid_size_half_x);
             float random_y_pos = UtilityFunc.RandomRange(box_pos_y - grid_size_half_y, box_pos_y + grid_size_half_y);
 
-            return new Vector2(random_x_pos, random_y_pos);
+            return (new Vector2(random_x_pos, random_y_pos), terrains[random_terrain_index]);
         }
 
         [System.Serializable]

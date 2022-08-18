@@ -18,12 +18,13 @@ namespace Hsinpa.Winweed
 
         [Header("Visual Config")]
         [SerializeField]
-        private Color mouseHoverColor = new Color(0.1f, 0.6f, 0.1f, 1f);
+        private Color mouseHoverColor = new Color(0.5f, 0.8f, 0.95f, 1f);
 
         [SerializeField]
-        private Color mousePaintedColor = new Color(0.0f, 0.8f, 0.8f, 1f);
+        private Color mousePaintedColor = new Color(0.0f, 1f, 0.1f, 1f);
 
-        private Color gridColorDefault = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+        [SerializeField]
+        private Color gridColorDefault = new Color(1f, 1f, 1f, 1f);
 
         private Vector2 mouse_uv;
         #region Editor Only Script
@@ -68,16 +69,12 @@ namespace Hsinpa.Winweed
             }
         }
 
-        private void GizmosShowMouseHover() { 
-            
-        }
-
         private bool GizmosShowPaintTerrain(int index_x, int index_y, Vector3 position, Vector3 size) {
-
             var paintedStruct = terrainSRP.GetPaintedStruct(index_x, index_y);
 
             if (paintedStruct.is_valid) {
-                GizmosDrawCube(mousePaintedColor * paintedStruct.weight, position, size);
+                Color color = Color.Lerp(gridColorDefault, mousePaintedColor, paintedStruct.weight);
+                GizmosDrawCube(color, position, size);
             }
 
             return paintedStruct.is_valid;

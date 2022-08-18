@@ -45,7 +45,7 @@ namespace Hsinpa.Winweed.Uti
 
         public static float RandomRange(float min, float max)
         {
-            return ((float)random.NextDouble() * (max - min)) + (0 - min);
+            return ((float)random.NextDouble() * (max - min)) + min;
         }
 
         public static Dictionary<T, K> SetDictionary<T, K>(Dictionary<T, K> dict, T key, K addValue)
