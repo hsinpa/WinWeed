@@ -75,6 +75,10 @@ namespace Hsinpa.Winweed
             return (Subdivide.x * grid_y) + grix_x;
         }
 
+        public static bool IsUVValid(Vector2 uv) {
+            return (uv.x >= 0 && uv.x <= 1.0f && uv.y >= 0 & uv.y <= 1.0f);
+        }
+
         public (Vector2, PaintedTerrainStruct) GetRandom2DPosition(List<PaintedTerrainStruct> terrains, Vector3 centerPosition) {
 
             int painted_terrain_count = terrains.Count;

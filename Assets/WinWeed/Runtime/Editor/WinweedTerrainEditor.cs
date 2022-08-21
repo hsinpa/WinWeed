@@ -26,11 +26,7 @@ namespace Hsinpa.Winweed.EditorCode
             string lockString = (lockInspectorFlag) ? "Unlock" : "Lock";
             if (GUILayout.Button(lockString))
             {
-                lockInspectorFlag = !lockInspectorFlag;
-                ActiveEditorTracker.sharedTracker.isLocked = lockInspectorFlag;
-
-                if (!lockInspectorFlag)
-                    ActiveEditorTracker.sharedTracker.ForceRebuild();
+                LockInspector(!lockInspectorFlag);
 
                 return;
             }
@@ -38,6 +34,11 @@ namespace Hsinpa.Winweed.EditorCode
 
         private void OnSceneGUI()
         {
+            if (Application.isPlaying && lockInspectorFlag) {
+                LockInspector(false);
+                return;
+            }
+
             Event guiEvent = Event.current;
             if (lockInspectorFlag)
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
@@ -46,6 +47,7 @@ namespace Hsinpa.Winweed.EditorCode
 
             if (guiEvent.type == EventType.MouseUp && guiEvent.button == 0)
                 _mouseClickFlag = false;
+
 
             Input(guiEvent);
             //Draw(guiEvent);
@@ -70,7 +72,7 @@ namespace Hsinpa.Winweed.EditorCode
                 builder.SetMouseUV(uv);
                 Vector2Int gridIndex = builder.TerrainSRP.GetGridIndexFromUV(uv);
 
-                if (_mouseClickFlag && gridIndex.x >= 0 && gridIndex.y >= 0 && lockInspectorFlag) {
+                if (_mouseClickFlag && lockInspectorFlag && TerrainSRP.IsUVValid(uv)) {
                     builder.TerrainSRP.PaintTerrain(new TerrainSRP.PaintedTerrainStruct() { index = gridIndex, weight = builder.Brush_Weight });
 
                     EditorUtility.SetDirty(builder.TerrainSRP);
@@ -85,10 +87,18 @@ namespace Hsinpa.Winweed.EditorCode
             //Debug.Log($"Mouse Direction {direction.x}, {direction.y}, {direction.z}");
         }
 
+
+        private void LockInspector(bool p_lock) {
+            lockInspectorFlag = p_lock;
+            ActiveEditorTracker.sharedTracker.isLocked = lockInspectorFlag;
+
+            if (!lockInspectorFlag)
+                ActiveEditorTracker.sharedTracker.ForceRebuild();
+        }
+
         private void OnEnable()
         {
             builder = (WeedTerrainBuilder)target;
-
         }
 
     }

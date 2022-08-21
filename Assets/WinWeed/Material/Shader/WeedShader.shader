@@ -11,6 +11,8 @@ Shader "Hsinpa/WeedShader"
 
         LOD 100
         Cull Off
+        ZWrite On
+        ZTest On
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -28,6 +30,8 @@ Shader "Hsinpa/WeedShader"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_instancing
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 
             struct appdata
             {
@@ -40,9 +44,10 @@ Shader "Hsinpa/WeedShader"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
-                half3 normal        : TEXCOORD1;
-                half3 viewDir: TEXCOORD2;
+                float4 vertex_CS : SV_POSITION; //Clip space
+                float3 vertex_WS : TEXCOORD1; // World space
+                half3 normal        : TEXCOORD2;
+                half3 viewDir: TEXCOORD3;
             };
 
             struct MeshProperties {
@@ -98,13 +103,18 @@ Shader "Hsinpa/WeedShader"
 
                 //Calculate bezier curve
                 float t = v.vertex.y / _Properties[instanceID].a_height;
-                v.vertex.y = 0;
+                //v.vertex.y = 0;
                 float4 bezier_vertex_pos = float4(BezierCurve(_Properties[instanceID].a_bezier_startpoint, bezier_startctrl, bezier_endpoint, bezier_endctrl, t), 0);
-                bezier_vertex_pos -= v.vertex;
+                float4 offset = bezier_vertex_pos - v.vertex;
+                v.vertex -= offset;
+                v.vertex.w = 1;
 
-                float4 pos = mul(_Properties[instanceID].a_mat, bezier_vertex_pos);
+                float4 pos = mul(_Properties[instanceID].a_mat, v.vertex);
 
-                o.vertex = TransformObjectToHClip(pos.xyz);
+                o.vertex_CS = TransformWorldToHClip(pos.xyz);
+                //o.vertex_WS = TransformObjectToWorld(pos.xyz);
+                o.vertex_WS = pos.xyz;
+
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.normal = TransformObjectToWorldNormal(v.normal);
                 o.viewDir = GetCameraPositionWS() - pos.xyz;
@@ -114,16 +124,32 @@ Shader "Hsinpa/WeedShader"
                 return o;
             }
 
-            half4 frag (v2f i) : SV_Target
+            half4 frag(v2f i) : SV_Target
             {
 
-                Light light = GetMainLight();
-                float3 lightDirWS = light.direction;
+                //Light light = GetMainLight();
+                //float3 lightDirWS = light.direction;
+                //float lightWeight = dot(-lightDirWS, i.normal);
 
-                half3 texture_col = (SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv) * _MainColor).xyz;
+                float4 diffuseColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
 
+                float4 shadowCoord = TransformWorldToShadowCoord(i.vertex_WS);
+                Light mainLight = GetMainLight(shadowCoord);
+                float3 lightDir = mainLight.direction;
+                float3 lightColor = mainLight.color;
+                float3 normalWS = i.normal;
 
-                return half4(texture_col, 1.0);
+                float4 color = float4(1, 1, 1, 1);
+                float minDotLN = 0.2;
+
+                float3 ambientLight = lightColor * 0.1;
+
+                color.rgb = max(minDotLN, abs(dot(lightDir, normalWS))) * lightColor * diffuseColor.rgb * _MainColor.rgb * mainLight.shadowAttenuation;
+                color.rgb += ambientLight;
+
+                //half3 texture_col = ((SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv) * _MainColor).xyz * light.color * lightWeight) + ambientLight;
+
+                return color;
             }
             ENDHLSL
         }

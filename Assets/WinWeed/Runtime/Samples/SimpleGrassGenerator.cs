@@ -78,10 +78,12 @@ namespace Hsinpa.Winweed.Sample
 
             this._grassMesh = new GrassMesh();
 
-            this.m_grassMesh = this._grassMesh.CreateMesh(height: grass_height, width: 0.05f, sharpness: 0.3f, segment: SEGMENT);
+            this.m_grassMesh = this._grassMesh.CreateMesh(height: grass_height, width: 0.02f, sharpness: 0.3f, segment: SEGMENT);
 
+            Vector3 spawnCenterPosition = m_bound.center;
+            spawnCenterPosition.y -= grass_height * 0.5f;
             this.m_argsCommandBuffer = GetCommandShaderArg(this.m_grassMesh, spawnInstanceCount);
-            this.m_meshCommandBuffer = GetCommandShaderMesh(spawnInstanceCount, m_bound_position, grass_height);
+            this.m_meshCommandBuffer = GetCommandShaderMesh(spawnInstanceCount, spawnCenterPosition, grass_height);
 
             _grassBezierPoints = GBezierCurve.GenerateRandomCurve(height: grass_height, end_point_radius: 0.5f);
 
@@ -95,7 +97,9 @@ namespace Hsinpa.Winweed.Sample
 
         private void Update()
         {
-            Graphics.DrawMeshInstancedIndirect(this.m_grassMesh, 0, material, this.m_bound, this.m_argsCommandBuffer, properties: this.m_PropertyBlock);
+            var newBound = this.m_bound;
+            Graphics.DrawMeshInstancedIndirect(this.m_grassMesh, 0, material, this.m_bound, this.m_argsCommandBuffer, properties: this.m_PropertyBlock, 
+                                                castShadows: UnityEngine.Rendering.ShadowCastingMode.On);
         }
 
         private ComputeBuffer GetCommandShaderArg(Mesh grassMesh, int instance_count) {
@@ -131,7 +135,7 @@ namespace Hsinpa.Winweed.Sample
                 float pos_x = random2DPos.x; //  (spawn_size.x  * 0.5f * UtilityFunc.RandomNegativeToOne()) + spawn_center.x;
                 float pos_y = spawn_center.y;
                 float pos_z = random2DPos.y; //(spawn_size.z * 0.5f * UtilityFunc.RandomNegativeToOne()) + spawn_center.z;
-                float random_height_bias = (peak_height * (random_strength * 0.2f * UtilityFunc.Random()));
+                float random_height_bias = (peak_height * (random_strength * 0.25f * UtilityFunc.Random()));
 
                 //Debug.Log($"x {pos_x}, y {pos_y}, z {pos_z}");
                 var grassBezierPoints = GBezierCurve.GenerateRandomCurve(height: peak_height, end_point_radius: 0.5f);

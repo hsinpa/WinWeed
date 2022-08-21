@@ -26,7 +26,7 @@ namespace Hsinpa.Winweed
         [SerializeField]
         private Color gridColorDefault = new Color(1f, 1f, 1f, 1f);
 
-        private Vector2 mouse_uv;
+        private Vector2 mouse_uv = Vector2.negativeInfinity;
         #region Editor Only Script
 
         public void SetMouseUV(Vector2 uv) {
