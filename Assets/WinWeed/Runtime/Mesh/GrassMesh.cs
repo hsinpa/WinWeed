@@ -59,10 +59,6 @@ namespace Hsinpa.Winweed
             vertices[0] = new Vector3(-width_radius, 0, 0);
             vertices[1] = new Vector3(width_radius, 0, 0);
 
-            Debug.Log("SegmentHeight " + segment_height);
-
-            Debug.Log("VerticeLengths " + verticeLens +", TriangleLengths " + triangleLens);
-
             //Build body
             for (int i = 0; i < segment; i++) {
 

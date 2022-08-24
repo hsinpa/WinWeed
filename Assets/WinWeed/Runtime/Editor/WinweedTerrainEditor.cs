@@ -4,6 +4,8 @@ using UnityEditor;
 using UnityEngine;
 using Hsinpa.Winweed;
 using Hsinpa.Winweed.Uti;
+using Hsinpa.Winweed.Sample;
+
 namespace Hsinpa.Winweed.EditorCode
 {
 
@@ -16,7 +18,9 @@ namespace Hsinpa.Winweed.EditorCode
         private WeedTerrainBuilder builder;
         private bool lockInspectorFlag = false;
 
-        private bool _mouseClickFlag = false; 
+        private bool _mouseClickFlag = false;
+        private bool _grassPreviewFlag;
+        private SimpleGrassGenerator simpleGrassGenerator;
 
         public override void OnInspectorGUI()
         {
@@ -24,30 +28,34 @@ namespace Hsinpa.Winweed.EditorCode
             builder = (WeedTerrainBuilder)target;
 
             string lockString = (lockInspectorFlag) ? "Unlock" : "Lock";
-            if (GUILayout.Button(lockString))
+            GUI.color =  (lockInspectorFlag) ? Color.red : Color.white;
+            if (GUILayout.Button( new GUIContent() { text = lockString }))
             {
                 LockInspector(!lockInspectorFlag);
 
                 return;
             }
-        }
+            GUI.color = Color.white;
 
-        private void OnSceneGUI()
-        {
-            if (Application.isPlaying && lockInspectorFlag) {
-                LockInspector(false);
+            if (GUILayout.Button("Redraw"))
+            {
+                simpleGrassGenerator.ReDraw();
+
                 return;
             }
+        }
+
+        private void OnSceneGUI(SceneView sceneView)
+        {
+            SceneView.RepaintAll();
 
             Event guiEvent = Event.current;
-            if (lockInspectorFlag)
+            if (lockInspectorFlag) {
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+            }
+
             if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
                 _mouseClickFlag = true;
-
-            if (guiEvent.type == EventType.MouseUp && guiEvent.button == 0)
-                _mouseClickFlag = false;
-
 
             Input(guiEvent);
             //Draw(guiEvent);
@@ -63,33 +71,29 @@ namespace Hsinpa.Winweed.EditorCode
 
             var actionResult = CollisionUti.IntersectionPlane(plane_position, plane_normal, mousePos, direction);
             
-            if (actionResult.valid && builder.TerrainSRP != null) {
+            if (actionResult.valid && builder.DataSRP != null) {
                 Vector2 uv = new Vector2(0, 0);
                 Vector3 landing_pos = mousePos + (direction * actionResult.t);
-                CollisionUti.GetPlaneIntersectUV(new Vector2(plane_position.x, plane_position.z), builder.TerrainSRP.Terrain_Size,
+                CollisionUti.GetPlaneIntersectUV(new Vector2(plane_position.x, plane_position.z), builder.DataSRP.Size,
                                                  new Vector2(landing_pos.x, landing_pos.z), out uv);
 
                 builder.SetMouseUV(uv);
-                Vector2Int gridIndex = builder.TerrainSRP.GetGridIndexFromUV(uv);
+                Vector2Int gridIndex = builder.DataSRP.GetGridIndexFromUV(uv);
 
                 if (_mouseClickFlag && lockInspectorFlag && TerrainSRP.IsUVValid(uv)) {
-                    builder.TerrainSRP.PaintTerrain(new TerrainSRP.PaintedTerrainStruct() { index = gridIndex, weight = builder.Brush_Weight });
+                    builder.DataSRP.PaintTerrain(new TerrainSRP.PaintedTerrainStruct() { index = gridIndex, weight = builder.Brush_Weight });
 
-                    EditorUtility.SetDirty(builder.TerrainSRP);
+                    EditorUtility.SetDirty(builder.DataSRP);
                 }
 
                 SceneView.RepaintAll();
-                //Debug.Log($"landing_pos {landing_pos.x}, {landing_pos.y}, {landing_pos.z}");
-                //Debug.Log($"UV {uv.x}, {uv.y}");
             }
-
-            //Debug.Log($"Mouse Pos {mousePos.x}, {mousePos.y}, {mousePos.z}");
-            //Debug.Log($"Mouse Direction {direction.x}, {direction.y}, {direction.z}");
         }
 
 
         private void LockInspector(bool p_lock) {
             lockInspectorFlag = p_lock;
+
             ActiveEditorTracker.sharedTracker.isLocked = lockInspectorFlag;
 
             if (!lockInspectorFlag)
@@ -99,6 +103,26 @@ namespace Hsinpa.Winweed.EditorCode
         private void OnEnable()
         {
             builder = (WeedTerrainBuilder)target;
+            simpleGrassGenerator = builder.GetComponent<SimpleGrassGenerator>();
+            SceneView.duringSceneGui += OnSceneGUI;
+
+            if (Application.isPlaying)
+            {
+                builder.enable_preview = false;
+
+                if (ActiveEditorTracker.sharedTracker.isLocked) 
+                    LockInspector(false);
+            }
+        }
+
+        void OnDisable()
+        {
+            builder = (WeedTerrainBuilder)target;
+
+            if (builder == null) return;
+
+            SceneView.duringSceneGui -= OnSceneGUI;
+            builder.enable_preview = false;
         }
 
     }

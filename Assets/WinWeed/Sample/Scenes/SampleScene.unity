@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4474991, g: 0.49745166, b: 0.5753068, a: 1}
+  m_IndirectSpecularColor: {r: 0.44750226, g: 0.4974556, b: 0.5753078, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -206,7 +206,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &481961003
+--- !u!1 &371678102
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,47 +214,69 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 481961004}
-  - component: {fileID: 481961005}
+  - component: {fileID: 371678105}
+  - component: {fileID: 371678104}
+  - component: {fileID: 371678103}
   m_Layer: 0
-  m_Name: WeedTerrainBuilder
+  m_Name: Weed_2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &481961004
+--- !u!114 &371678103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371678102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e028385db915c034082601fb95e3056d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainSRP: {fileID: 11400000, guid: 682f066a283956243b12ce104d0cb599, type: 2}
+  brush_weight: 1
+  mouseHoverColor: {r: 0.1, g: 0.6, b: 0.1, a: 1}
+  mousePaintedColor: {r: 0, g: 0.8, b: 0.8, a: 1}
+  gridColorDefault: {r: 1, g: 1, b: 1, a: 1}
+  enable_preview: 0
+--- !u!114 &371678104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371678102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4740b913e3b35d843aceac7d7665e42b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
+  spawnInstanceCount: 50000
+  grass_height: 0.2
+  grass_width: 0.02
+  grass_sharpness: 0.3
+  random_strength: 1
+  wind_direction: {x: 0.12, y: 0.12, z: 0.3}
+  wind_strength: 0.1
+--- !u!4 &371678105
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 481961003}
+  m_GameObject: {fileID: 371678102}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.54, y: 0, z: 1.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &481961005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 481961003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e028385db915c034082601fb95e3056d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  terrainSRP: {fileID: 11400000, guid: 86e04c8c15bc54144bd3efc97b0d0117, type: 2}
-  brush_weight: 1
-  mouseHoverColor: {r: 0.1, g: 0.6, b: 0.1, a: 1}
-  mousePaintedColor: {r: 0, g: 0.8, b: 0.8, a: 1}
-  gridColorDefault: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,8 +520,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1480874776}
   - component: {fileID: 1480874777}
+  - component: {fileID: 1480874778}
   m_Layer: 0
-  m_Name: Weed
+  m_Name: Weed_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -513,7 +536,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1480874773}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.75, y: 0, z: 1.247}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -533,12 +556,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
-  spawnInstanceCount: 500
-  grass_height: 1
+  spawnInstanceCount: 4000
+  grass_height: 0.5
+  grass_width: 0.02
+  grass_sharpness: 0.3
   random_strength: 1
-  terrainSRP: {fileID: 11400000, guid: 86e04c8c15bc54144bd3efc97b0d0117, type: 2}
   wind_direction: {x: 0.12, y: 0.12, z: 0.3}
   wind_strength: 0.1
+--- !u!114 &1480874778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480874773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e028385db915c034082601fb95e3056d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainSRP: {fileID: 11400000, guid: 86e04c8c15bc54144bd3efc97b0d0117, type: 2}
+  brush_weight: 0.223
+  mouseHoverColor: {r: 0.1, g: 0.6, b: 0.1, a: 1}
+  mousePaintedColor: {r: 0, g: 0.8, b: 0.8, a: 1}
+  gridColorDefault: {r: 1, g: 1, b: 1, a: 1}
+  enable_preview: 0
 --- !u!1 &1777125096
 GameObject:
   m_ObjectHideFlags: 0

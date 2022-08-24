@@ -110,16 +110,15 @@ Shader "Hsinpa/WeedShader"
                 v.vertex.w = 1;
 
                 float4 pos = mul(_Properties[instanceID].a_mat, v.vertex);
+                float3 world_normal = mul((float3x3)_Properties[instanceID].a_mat, v.normal);
 
                 o.vertex_CS = TransformWorldToHClip(pos.xyz);
                 //o.vertex_WS = TransformObjectToWorld(pos.xyz);
                 o.vertex_WS = pos.xyz;
 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.normal = TransformObjectToWorldNormal(v.normal);
+                o.normal = normalize(world_normal);
                 o.viewDir = GetCameraPositionWS() - pos.xyz;
-
-
 
                 return o;
             }

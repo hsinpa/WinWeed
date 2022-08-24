@@ -10,7 +10,7 @@ namespace Hsinpa.Winweed
         [Header("Terrain Config")]
         [SerializeField]
         private TerrainSRP terrainSRP;
-        public TerrainSRP TerrainSRP => terrainSRP;
+        public TerrainSRP DataSRP => terrainSRP;
 
         [SerializeField, Range(0,1)]
         private float brush_weight = 0;
@@ -27,6 +27,9 @@ namespace Hsinpa.Winweed
         private Color gridColorDefault = new Color(1f, 1f, 1f, 1f);
 
         private Vector2 mouse_uv = Vector2.negativeInfinity;
+
+        public bool enable_preview;
+
         #region Editor Only Script
 
         public void SetMouseUV(Vector2 uv) {
@@ -35,16 +38,17 @@ namespace Hsinpa.Winweed
 
         private void OnDrawGizmos()
         {
-            if (terrainSRP == null || Application.isPlaying) return;
+
+            if (terrainSRP == null || Application.isPlaying || enable_preview) return;
             float space = 0.9f;
-            float grid_size_x = (terrainSRP.Terrain_Size.x / terrainSRP.Subdivide.x);
-            float grid_size_y = (terrainSRP.Terrain_Size.y / terrainSRP.Subdivide.y);
+            float grid_size_x = (terrainSRP.Size.x / terrainSRP.Subdivide.x);
+            float grid_size_y = (terrainSRP.Size.y / terrainSRP.Subdivide.y);
 
             float grid_height = 0.1f;
             Vector3 gridSize = new Vector3(grid_size_x * space, grid_height, grid_size_y * space);
 
-            float start_x = transform.position.x - (terrainSRP.Terrain_Size.x * 0.5f) + (gridSize.x * 0.5f);
-            float start_z = transform.position.z - (terrainSRP.Terrain_Size.y * 0.5f) + (gridSize.z * 0.5f);
+            float start_x = transform.position.x - (terrainSRP.Size.x * 0.5f) + (gridSize.x * 0.5f);
+            float start_z = transform.position.z - (terrainSRP.Size.y * 0.5f) + (gridSize.z * 0.5f);
 
             Vector2Int current_hover_grid = terrainSRP.GetGridIndexFromUV(this.mouse_uv);
 
@@ -67,6 +71,7 @@ namespace Hsinpa.Winweed
                         GizmosDrawCube(gridColorDefault, visualBoxCenter, gridSize);
                 }
             }
+
         }
 
         private bool GizmosShowPaintTerrain(int index_x, int index_y, Vector3 position, Vector3 size) {
@@ -85,7 +90,6 @@ namespace Hsinpa.Winweed
             Gizmos.color = color;
             Gizmos.DrawCube(position, size);
             Gizmos.color = gridColorDefault;
-
         }
         #endregion
     }

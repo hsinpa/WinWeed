@@ -14,8 +14,8 @@ namespace Hsinpa.Winweed
         public Vector2Int Subdivide => subdivide;
 
         [SerializeField]
-        private Vector2 terrain_size = Vector2.one;
-        public Vector2 Terrain_Size => terrain_size;
+        private Vector2 size = Vector2.one;
+        public Vector2 Size => size;
 
         //[SerializeField]
         //TerrainDictionary<int, PaintedTerrainStruct> _recordTerrains = new TerrainDictionary<int, PaintedTerrainStruct>();
@@ -84,15 +84,15 @@ namespace Hsinpa.Winweed
             int painted_terrain_count = terrains.Count;
             int random_terrain_index = UtilityFunc.RandomRange(0, painted_terrain_count);
 
-            float grid_size_x = (Terrain_Size.x / Subdivide.x);
-            float grid_size_y = (Terrain_Size.y / Subdivide.y);
+            float grid_size_x = (Size.x / Subdivide.x);
+            float grid_size_y = (Size.y / Subdivide.y);
 
             float grid_size_half_x = (grid_size_x * 0.5f);
             float grid_size_half_y = (grid_size_y * 0.5f);
 
 
-            float start_x = centerPosition.x - (Terrain_Size.x * 0.5f) + (grid_size_x * 0.5f);
-            float start_z = centerPosition.z - (Terrain_Size.y * 0.5f) + (grid_size_y * 0.5f);
+            float start_x = centerPosition.x - (Size.x * 0.5f) + (grid_size_x * 0.5f);
+            float start_z = centerPosition.z - (Size.y * 0.5f) + (grid_size_y * 0.5f);
 
             float box_pos_x = start_x + (grid_size_x * terrains[random_terrain_index].index.x);
             float box_pos_y = start_z + (grid_size_y * terrains[random_terrain_index].index.y);
