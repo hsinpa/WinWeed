@@ -28,7 +28,9 @@ namespace Hsinpa.Winweed
 
         private Vector2 mouse_uv = Vector2.negativeInfinity;
 
-        public bool enable_preview;
+        public State editor_state;
+
+        public enum State {GizmoHint, HideAllGizmo, Preview }
 
         #region Editor Only Script
 
@@ -38,8 +40,7 @@ namespace Hsinpa.Winweed
 
         private void OnDrawGizmos()
         {
-
-            if (terrainSRP == null || Application.isPlaying || enable_preview) return;
+            if (terrainSRP == null || Application.isPlaying || editor_state == State.Preview || editor_state == State.HideAllGizmo) return;
             float space = 0.9f;
             float grid_size_x = (terrainSRP.Size.x / terrainSRP.Subdivide.x);
             float grid_size_y = (terrainSRP.Size.y / terrainSRP.Subdivide.y);

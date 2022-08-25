@@ -36,13 +36,13 @@ MonoBehaviour:
     - index: {x: 2, y: 2}
       weight: 0.397
     - index: {x: 1, y: 2}
-      weight: 0.397
+      weight: 1
     - index: {x: 0, y: 2}
-      weight: 0.397
+      weight: 1
     - index: {x: 0, y: 1}
-      weight: 0.397
+      weight: 1
     - index: {x: 1, y: 1}
-      weight: 0.397
+      weight: 1
     - index: {x: 2, y: 1}
       weight: 0.397
     - index: {x: 3, y: 1}
@@ -72,9 +72,9 @@ MonoBehaviour:
     - index: {x: 2, y: 0}
       weight: 0.397
     - index: {x: 1, y: 0}
-      weight: 0.397
+      weight: 1
     - index: {x: 0, y: 0}
-      weight: 0.397
+      weight: 1
     - index: {x: 3, y: 0}
       weight: 0.223
     - index: {x: 8, y: 3}
@@ -90,17 +90,17 @@ MonoBehaviour:
     - index: {x: 8, y: 8}
       weight: 0.223
     - index: {x: 1, y: 3}
-      weight: 0.223
+      weight: 1
     - index: {x: 1, y: 4}
-      weight: 0.223
+      weight: 1
     - index: {x: 1, y: 5}
-      weight: 0.223
+      weight: 1
     - index: {x: 1, y: 6}
-      weight: 0.223
+      weight: 1
     - index: {x: 1, y: 7}
-      weight: 0.397
+      weight: 1
     - index: {x: 1, y: 8}
-      weight: 0.397
+      weight: 1
     - index: {x: 5, y: 3}
       weight: 0.223
     - index: {x: 5, y: 4}
@@ -190,23 +190,23 @@ MonoBehaviour:
     - index: {x: 2, y: 9}
       weight: 0.397
     - index: {x: 1, y: 9}
-      weight: 0.397
+      weight: 1
     - index: {x: 0, y: 9}
-      weight: 0.397
+      weight: 1
     - index: {x: 0, y: 3}
-      weight: 0.223
+      weight: 1
     - index: {x: 0, y: 4}
-      weight: 0.223
+      weight: 1
     - index: {x: 0, y: 5}
-      weight: 0.223
+      weight: 1
     - index: {x: 9, y: 3}
       weight: 0.223
     - index: {x: 0, y: 6}
-      weight: 0.223
+      weight: 1
     - index: {x: 0, y: 7}
-      weight: 0.397
+      weight: 1
     - index: {x: 0, y: 8}
-      weight: 0.397
+      weight: 1
     - index: {x: 9, y: 6}
       weight: 0.223
     - index: {x: 9, y: 8}

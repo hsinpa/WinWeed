@@ -62,5 +62,18 @@ namespace Hsinpa.Winweed.Uti
 
             return dict;
         }
+
+
+        public static void DeleteObject(GameObject p_object)
+        {
+            if (Application.isPlaying) GameObject.Destroy(p_object);
+            if (Application.isEditor) GameObject.DestroyImmediate(p_object);
+        }
+
+        public static void DeleteObject(Object p_object)
+        {
+            if (Application.isPlaying) Object.Destroy(p_object);
+            if (Application.isEditor) Object.DestroyImmediate(p_object);
+        }
     }
 }

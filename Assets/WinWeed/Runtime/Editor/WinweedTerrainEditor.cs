@@ -109,7 +109,8 @@ namespace Hsinpa.Winweed.EditorCode
 
             if (Application.isPlaying)
             {
-                builder.enable_preview = false;
+                if (builder.editor_state != WeedTerrainBuilder.State.HideAllGizmo)
+                    builder.editor_state = WeedTerrainBuilder.State.GizmoHint;
 
                 if (ActiveEditorTracker.sharedTracker.isLocked) 
                     LockInspector(false);
@@ -123,7 +124,9 @@ namespace Hsinpa.Winweed.EditorCode
             if (builder == null) return;
 
             SceneView.duringSceneGui -= OnSceneGUI;
-            builder.enable_preview = false;
+
+            if (builder.editor_state != WeedTerrainBuilder.State.HideAllGizmo)
+                builder.editor_state = WeedTerrainBuilder.State.GizmoHint;
         }
 
     }
