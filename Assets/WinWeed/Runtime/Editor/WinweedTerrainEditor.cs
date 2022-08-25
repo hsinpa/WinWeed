@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Hsinpa.Winweed;
 using Hsinpa.Winweed.Uti;
-using Hsinpa.Winweed.Sample;
+using Hsinpa.Winweed;
 
 namespace Hsinpa.Winweed.EditorCode
 {
@@ -20,7 +20,7 @@ namespace Hsinpa.Winweed.EditorCode
 
         private bool _mouseClickFlag = false;
         private bool _grassPreviewFlag;
-        private SimpleGrassGenerator simpleGrassGenerator;
+        private SimpleWeedGenerator simpleGrassGenerator;
 
         public override void OnInspectorGUI()
         {
@@ -63,6 +63,7 @@ namespace Hsinpa.Winweed.EditorCode
 
         void Input(Event guiEvent)
         {
+            if (builder == null) return;
             Vector3 mousePos = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition).origin;
             Vector3 direction = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition).direction;
 
@@ -103,7 +104,7 @@ namespace Hsinpa.Winweed.EditorCode
         private void OnEnable()
         {
             builder = (WeedTerrainBuilder)target;
-            simpleGrassGenerator = builder.GetComponent<SimpleGrassGenerator>();
+            simpleGrassGenerator = builder.GetComponent<SimpleWeedGenerator>();
             SceneView.duringSceneGui += OnSceneGUI;
 
             if (Application.isPlaying)

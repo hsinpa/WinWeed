@@ -15,5 +15,21 @@ MonoBehaviour:
   subdivide: {x: 6, y: 6}
   size: {x: 1, y: 1}
   _recordTerrains:
-    m_keys: 
-    m_values: []
+    m_keys: 17000000110000000b0000001d000000040000000a0000000900000010000000
+    m_values:
+    - index: {x: 5, y: 3}
+      weight: 1
+    - index: {x: 5, y: 2}
+      weight: 1
+    - index: {x: 5, y: 1}
+      weight: 1
+    - index: {x: 5, y: 4}
+      weight: 1
+    - index: {x: 4, y: 0}
+      weight: 1
+    - index: {x: 4, y: 1}
+      weight: 1
+    - index: {x: 3, y: 1}
+      weight: 1
+    - index: {x: 4, y: 2}
+      weight: 1
