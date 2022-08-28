@@ -4,6 +4,8 @@ Shader "Hsinpa/WeedShader"
     {
         [MainTexture] _MainTex ("Texture", 2D) = "white" {}
         [MainColor] _MainColor("Diffuse", Color) = (1, 1, 1, 1)
+
+        _TraceMaskTex("TraceMask Texture", 2D) = "black" {}
     }
     SubShader
     {
@@ -21,6 +23,8 @@ Shader "Hsinpa/WeedShader"
         CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
             half4 _MainColor;
+
+            float4 _TraceMaskTex_ST;
         CBUFFER_END
         ENDHLSL
 
@@ -32,6 +36,7 @@ Shader "Hsinpa/WeedShader"
             #pragma multi_compile_instancing
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma target 5.0
 
             struct appdata
             {
@@ -62,12 +67,19 @@ Shader "Hsinpa/WeedShader"
             
             // This macro declares _BaseMap as a Texture2D object.
             TEXTURE2D(_MainTex);
+            //TEXTURE2D(_TraceMaskTex);
+
             // This macro declares the sampler for the _BaseMap texture.
             SAMPLER(sampler_MainTex);
+            SAMPLER(sampler_TraceMaskTex);
+
+            sampler2D _TraceMaskTex;
 
             uniform half u_wind_strength;
             uniform half3 u_wind_direction;
 
+            uniform half2 u_terrain_bottom_left_point;
+            uniform half2 u_terrain_top_right_point;
 
             StructuredBuffer<MeshProperties> _Properties;
 
@@ -90,14 +102,27 @@ Shader "Hsinpa/WeedShader"
                 return frac(p.x + p.y);
             }
 
+            half FindTraceWeight(half3 world_position) {
+                half terrain_width = u_terrain_top_right_point.x - u_terrain_bottom_left_point.x;
+                half terrain_height = u_terrain_top_right_point.y - u_terrain_bottom_left_point.y;
+
+                half uv_x = 1.0 - ( (u_terrain_top_right_point.x - world_position.x) / terrain_width );
+                half uv_y = 1.0 - ((u_terrain_top_right_point.y - world_position.z) / terrain_height);
+                //return 0;
+                return tex2Dlod(_TraceMaskTex, float4(uv_x, uv_y, 0.0, 0.0)).r;
+            }
+
             v2f vert (appdata v, uint instanceID: SV_InstanceID)
             {
                 v2f o;
+
+                half4 absolute_pos = mul(_Properties[instanceID].a_mat, v.vertex);
 
                 //Calculate Wind effect
                 half randam_factor = N21(half2(v.vertex.y + instanceID, instanceID + v.vertex.x + v.vertex.z));
                 half3 wind_factor = (sin(_Time.z + randam_factor) * 0.05) * u_wind_direction * u_wind_strength;
                 float3 bezier_startctrl = _Properties[instanceID].a_bezier_startctrl + (wind_factor * 0.5f);
+
                 float3 bezier_endpoint = _Properties[instanceID].a_bezier_endpoint + (wind_factor);
                 float3 bezier_endctrl = _Properties[instanceID].a_bezier_endctrl + (wind_factor);
 
@@ -107,6 +132,18 @@ Shader "Hsinpa/WeedShader"
                 float4 bezier_vertex_pos = float4(BezierCurve(_Properties[instanceID].a_bezier_startpoint, bezier_startctrl, bezier_endpoint, bezier_endctrl, t), 0);
                 float4 offset = bezier_vertex_pos - v.vertex;
                 v.vertex -= offset;
+
+                //Trace Weight
+                half trace_weight = FindTraceWeight(absolute_pos.xyz);
+                //half trace_weight = 0.0;
+
+                half3 fall_direction = (_Properties[instanceID].a_bezier_endctrl - _Properties[instanceID].a_bezier_endpoint);
+                half fall_length = length(fall_direction);
+                      fall_direction = normalize(fall_direction * t) * fall_length * 2;
+
+                half original_y = v.vertex.y;
+                v.vertex.xyz += (fall_direction * trace_weight);
+                v.vertex.y = original_y - (trace_weight * (v.vertex.y * 0.5));
                 v.vertex.w = 1;
 
                 float4 pos = mul(_Properties[instanceID].a_mat, v.vertex);

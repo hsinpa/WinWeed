@@ -91,14 +91,21 @@ namespace Hsinpa.Winweed
         public int LOD_Level => m_lod_level;
 
         private bool allow_create_buffer_flag = true; //Prevent multithread weird behavior
+        private bool Allow_create_buffer_flag => allow_create_buffer_flag || Application.isEditor; //Prevent multithread weird behavior
 
         #region Public API
-        public void ReDraw()
+        public void ReDraw(int p_instance_count = -1)
         {
-            if (!allow_create_buffer_flag) return;
+            if (!Allow_create_buffer_flag) return;
+
+            if (p_instance_count <= 0)
+                p_instance_count = spawnInstanceCount;
+
+            if (this.m_PropertyBlock == null)
+                this.m_PropertyBlock = new MaterialPropertyBlock();
 
             Dispose();
-            CreateGrassBufferData(p_spawn_count: dynamicInstanceCount, p_grass_height: grass_height, p_grass_width: grass_width, p_grass_sharpness: grass_sharpness);
+            CreateGrassBufferData(p_spawn_count: p_instance_count, p_grass_height: grass_height, p_grass_width: grass_width, p_grass_sharpness: grass_sharpness);
         }
 
         public void SetCulling(bool is_cull)
@@ -111,7 +118,7 @@ namespace Hsinpa.Winweed
 
             dynamicInstanceCount = Mathf.FloorToInt(spawnInstanceCount * lod_weight);
             if (dynamicInstanceCount > 0)
-                ReDraw();
+                ReDraw(dynamicInstanceCount);
         }
 
         public void Dispose()
@@ -139,7 +146,7 @@ namespace Hsinpa.Winweed
             this.m_PropertyBlock = new MaterialPropertyBlock();
 
             dynamicInstanceCount = spawnInstanceCount;
-            ReDraw();
+            ReDraw(dynamicInstanceCount);
         }
 
         private void Update()
@@ -147,7 +154,7 @@ namespace Hsinpa.Winweed
             bool allow_draw = ((Application.isPlaying && !m_is_cull && dynamicInstanceCount > 0) || (PreviewMode));
 
             if (this.m_argsCommandBuffer == null) {
-                ReDraw();
+                ReDraw(dynamicInstanceCount);
                 return;
             }
 
@@ -174,8 +181,10 @@ namespace Hsinpa.Winweed
 
         #region Private API
 
-        private async void CreateGrassBufferData(int p_spawn_count, float p_grass_height, float p_grass_width, float p_grass_sharpness ) {
-            if (p_spawn_count <= 0) return;
+        private async void CreateGrassBufferData(int p_spawn_count, float p_grass_height, float p_grass_width, float p_grass_sharpness) {
+            if (p_spawn_count <= 0) {
+                return;
+            }
 
             allow_create_buffer_flag = false;
 

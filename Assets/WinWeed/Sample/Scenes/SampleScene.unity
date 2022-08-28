@@ -503,7 +503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
-  spawnInstanceCount: 4000
+  spawnInstanceCount: 20
   grass_height: 0.5
   grass_width: 0.02
   grass_sharpness: 0.3
@@ -556,8 +556,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
-  spawnInstanceCount: 4000
-  grass_height: 0.5
+  spawnInstanceCount: 1000
+  grass_height: 1
   grass_width: 0.02
   grass_sharpness: 0.3
   random_strength: 1

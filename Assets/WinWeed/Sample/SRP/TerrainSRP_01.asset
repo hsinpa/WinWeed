@@ -15,24 +15,12 @@ MonoBehaviour:
   subdivide: {x: 10, y: 10}
   size: {x: 6, y: 6}
   _recordTerrains:
-    m_keys: 050000001d0000001c0000001b0000001a0000001900000018000000170000001600000015000000140000000a0000000b0000000c0000000d0000000e0000000f0000001000000011000000130000001200000009000000080000000700000006000000040000000200000001000000000000000300000026000000300000003a000000440000004e000000580000001f00000029000000330000003d0000004700000051000000230000002d00000037000000410000004b00000055000000540000004a00000040000000360000002c0000002200000025000000240000002e00000038000000420000004c00000056000000570000004d00000043000000390000002f000000210000002b000000350000003f000000490000005300000048000000520000003e000000340000002a00000020000000630000006200000061000000600000005f0000005e0000005d0000005c0000005b0000005a0000001e0000002800000032000000270000003c000000460000005000000045000000590000003b0000004f00000031000000
+    m_keys: 050000001d0000001600000015000000140000000a0000000b0000000c0000000f000000100000001100000007000000060000000200000001000000000000001f00000029000000330000003d0000004700000051000000370000004b0000005500000048000000520000001e00000028000000320000003c00000046000000500000002c0000002d0000002b0000002e0000003600000038000000390000002f000000350000003f000000400000004100000042000000430000004c0000004d0000004e000000440000003e0000005300000054000000490000004a00000056000000570000005c0000005d0000005e0000005f0000006000000061000000
     m_values:
     - index: {x: 5, y: 0}
       weight: 1
     - index: {x: 9, y: 2}
       weight: 1
-    - index: {x: 8, y: 2}
-      weight: 1
-    - index: {x: 7, y: 2}
-      weight: 0.223
-    - index: {x: 6, y: 2}
-      weight: 0.223
-    - index: {x: 5, y: 2}
-      weight: 0.223
-    - index: {x: 4, y: 2}
-      weight: 0.223
-    - index: {x: 3, y: 2}
-      weight: 0.223
     - index: {x: 2, y: 2}
       weight: 0.397
     - index: {x: 1, y: 2}
@@ -45,50 +33,22 @@ MonoBehaviour:
       weight: 1
     - index: {x: 2, y: 1}
       weight: 0.397
-    - index: {x: 3, y: 1}
-      weight: 0.223
-    - index: {x: 4, y: 1}
-      weight: 0.223
     - index: {x: 5, y: 1}
       weight: 1
     - index: {x: 6, y: 1}
       weight: 1
     - index: {x: 7, y: 1}
       weight: 1
-    - index: {x: 9, y: 1}
-      weight: 1
-    - index: {x: 8, y: 1}
-      weight: 1
-    - index: {x: 9, y: 0}
-      weight: 0.223
-    - index: {x: 8, y: 0}
-      weight: 0.223
     - index: {x: 7, y: 0}
       weight: 1
     - index: {x: 6, y: 0}
       weight: 1
-    - index: {x: 4, y: 0}
-      weight: 0.223
     - index: {x: 2, y: 0}
       weight: 0.397
     - index: {x: 1, y: 0}
       weight: 1
     - index: {x: 0, y: 0}
       weight: 1
-    - index: {x: 3, y: 0}
-      weight: 0.223
-    - index: {x: 8, y: 3}
-      weight: 0.223
-    - index: {x: 8, y: 4}
-      weight: 0.223
-    - index: {x: 8, y: 5}
-      weight: 0.223
-    - index: {x: 8, y: 6}
-      weight: 0.223
-    - index: {x: 8, y: 7}
-      weight: 0.223
-    - index: {x: 8, y: 8}
-      weight: 0.223
     - index: {x: 1, y: 3}
       weight: 1
     - index: {x: 1, y: 4}
@@ -101,97 +61,15 @@ MonoBehaviour:
       weight: 1
     - index: {x: 1, y: 8}
       weight: 1
-    - index: {x: 5, y: 3}
-      weight: 0.223
-    - index: {x: 5, y: 4}
-      weight: 1
     - index: {x: 5, y: 5}
-      weight: 1
-    - index: {x: 5, y: 6}
       weight: 1
     - index: {x: 5, y: 7}
       weight: 1
     - index: {x: 5, y: 8}
       weight: 1
-    - index: {x: 4, y: 8}
-      weight: 0.223
-    - index: {x: 4, y: 7}
-      weight: 0.223
-    - index: {x: 4, y: 6}
-      weight: 0.223
-    - index: {x: 4, y: 5}
-      weight: 0.223
-    - index: {x: 4, y: 4}
-      weight: 0.223
-    - index: {x: 4, y: 3}
-      weight: 0.223
-    - index: {x: 7, y: 3}
-      weight: 0.223
-    - index: {x: 6, y: 3}
-      weight: 0.223
-    - index: {x: 6, y: 4}
-      weight: 0.223
-    - index: {x: 6, y: 5}
-      weight: 0.223
-    - index: {x: 6, y: 6}
-      weight: 0.223
-    - index: {x: 6, y: 7}
-      weight: 0.223
-    - index: {x: 6, y: 8}
-      weight: 0.223
-    - index: {x: 7, y: 8}
-      weight: 0.223
-    - index: {x: 7, y: 7}
-      weight: 0.223
-    - index: {x: 7, y: 6}
-      weight: 0.223
-    - index: {x: 7, y: 5}
-      weight: 0.223
-    - index: {x: 7, y: 4}
-      weight: 0.223
-    - index: {x: 3, y: 3}
-      weight: 0.223
-    - index: {x: 3, y: 4}
-      weight: 0.223
-    - index: {x: 3, y: 5}
-      weight: 0.223
-    - index: {x: 3, y: 6}
-      weight: 0.223
-    - index: {x: 3, y: 7}
-      weight: 0.223
-    - index: {x: 3, y: 8}
-      weight: 0.223
     - index: {x: 2, y: 7}
-      weight: 0.397
-    - index: {x: 2, y: 8}
-      weight: 0.397
-    - index: {x: 2, y: 6}
-      weight: 0.223
-    - index: {x: 2, y: 5}
-      weight: 0.223
-    - index: {x: 2, y: 4}
-      weight: 0.223
-    - index: {x: 2, y: 3}
-      weight: 0.223
-    - index: {x: 9, y: 9}
-      weight: 0.223
-    - index: {x: 8, y: 9}
-      weight: 0.223
-    - index: {x: 7, y: 9}
-      weight: 0.223
-    - index: {x: 6, y: 9}
-      weight: 0.223
-    - index: {x: 5, y: 9}
-      weight: 0.223
-    - index: {x: 4, y: 9}
-      weight: 0.223
-    - index: {x: 3, y: 9}
-      weight: 0.223
-    - index: {x: 2, y: 9}
-      weight: 0.397
-    - index: {x: 1, y: 9}
       weight: 1
-    - index: {x: 0, y: 9}
+    - index: {x: 2, y: 8}
       weight: 1
     - index: {x: 0, y: 3}
       weight: 1
@@ -199,21 +77,71 @@ MonoBehaviour:
       weight: 1
     - index: {x: 0, y: 5}
       weight: 1
-    - index: {x: 9, y: 3}
-      weight: 0.223
     - index: {x: 0, y: 6}
       weight: 1
     - index: {x: 0, y: 7}
       weight: 1
     - index: {x: 0, y: 8}
       weight: 1
-    - index: {x: 9, y: 6}
-      weight: 0.223
-    - index: {x: 9, y: 8}
-      weight: 0.223
-    - index: {x: 9, y: 5}
-      weight: 0.223
-    - index: {x: 9, y: 7}
-      weight: 0.223
-    - index: {x: 9, y: 4}
-      weight: 0.223
+    - index: {x: 4, y: 4}
+      weight: 1
+    - index: {x: 5, y: 4}
+      weight: 1
+    - index: {x: 3, y: 4}
+      weight: 1
+    - index: {x: 6, y: 4}
+      weight: 1
+    - index: {x: 4, y: 5}
+      weight: 1
+    - index: {x: 6, y: 5}
+      weight: 1
+    - index: {x: 7, y: 5}
+      weight: 1
+    - index: {x: 7, y: 4}
+      weight: 1
+    - index: {x: 3, y: 5}
+      weight: 1
+    - index: {x: 3, y: 6}
+      weight: 1
+    - index: {x: 4, y: 6}
+      weight: 1
+    - index: {x: 5, y: 6}
+      weight: 1
+    - index: {x: 6, y: 6}
+      weight: 1
+    - index: {x: 7, y: 6}
+      weight: 1
+    - index: {x: 6, y: 7}
+      weight: 1
+    - index: {x: 7, y: 7}
+      weight: 1
+    - index: {x: 8, y: 7}
+      weight: 1
+    - index: {x: 8, y: 6}
+      weight: 1
+    - index: {x: 2, y: 6}
+      weight: 1
+    - index: {x: 3, y: 8}
+      weight: 1
+    - index: {x: 4, y: 8}
+      weight: 1
+    - index: {x: 3, y: 7}
+      weight: 1
+    - index: {x: 4, y: 7}
+      weight: 1
+    - index: {x: 6, y: 8}
+      weight: 1
+    - index: {x: 7, y: 8}
+      weight: 1
+    - index: {x: 2, y: 9}
+      weight: 1
+    - index: {x: 3, y: 9}
+      weight: 1
+    - index: {x: 4, y: 9}
+      weight: 1
+    - index: {x: 5, y: 9}
+      weight: 1
+    - index: {x: 6, y: 9}
+      weight: 1
+    - index: {x: 7, y: 9}
+      weight: 1
