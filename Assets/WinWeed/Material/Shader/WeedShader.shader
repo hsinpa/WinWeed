@@ -19,6 +19,8 @@ Shader "Hsinpa/WeedShader"
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareOpaqueTexture.hlsl"
 
         CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
@@ -67,11 +69,12 @@ Shader "Hsinpa/WeedShader"
             
             // This macro declares _BaseMap as a Texture2D object.
             TEXTURE2D(_MainTex);
-            //TEXTURE2D(_TraceMaskTex);
+            //TEXTURE2D(_CameraDepthTexture);
 
             // This macro declares the sampler for the _BaseMap texture.
             SAMPLER(sampler_MainTex);
             SAMPLER(sampler_TraceMaskTex);
+            //SAMPLER(sampler_CameraDepthTexture);
 
             sampler2D _TraceMaskTex;
 
@@ -168,6 +171,7 @@ Shader "Hsinpa/WeedShader"
                 //float lightWeight = dot(-lightDirWS, i.normal);
 
                 float4 diffuseColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 depthColor = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, i.uv);
 
                 float4 shadowCoord = TransformWorldToShadowCoord(i.vertex_WS);
                 Light mainLight = GetMainLight(shadowCoord);
@@ -180,9 +184,9 @@ Shader "Hsinpa/WeedShader"
 
                 float3 ambientLight = lightColor * 0.1;
 
-                color.rgb = max(minDotLN, abs(dot(lightDir, normalWS))) * lightColor * diffuseColor.rgb * _MainColor.rgb * mainLight.shadowAttenuation;
-                color.rgb += ambientLight;
-
+                //color.rgb = max(minDotLN, abs(dot(lightDir, normalWS))) * lightColor * diffuseColor.rgb * _MainColor.rgb * mainLight.shadowAttenuation;
+                //color.rgb += ambientLight;
+                color.rgb = depthColor.rgb;
                 //half3 texture_col = ((SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv) * _MainColor).xyz * light.color * lightWeight) + ambientLight;
 
                 return color;
