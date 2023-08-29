@@ -1,3 +1,4 @@
+using Hsinpa.Winweed.Uti;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Hsinpa.Winweed.Terrain
     {
         public struct TerrainData {
             public Vector3 position;
-            public Quaternion  rotation;
+            public Vector3 rotation;
             public float strength;
         }
 
@@ -22,8 +23,24 @@ namespace Hsinpa.Winweed.Terrain
             this._precision = digitPrecision;
         }
 
-        public void Insert(Vector3 position, Quaternion rotation, float strength) {
-            
+        public void Insert(Vector3 position, Vector3 rotation, float strength) {
+            Vector3Int vector_key = TransformPosition(position);
+
+            Debug.Log($"Insert Key {vector_key}");
+
+            if (dataset.TryGetValue(vector_key, out TerrainData p_terrainData)) {
+                p_terrainData.rotation = Vector3.Lerp(p_terrainData.rotation, rotation, 0.5f);
+                p_terrainData.strength = Mathf.Clamp(p_terrainData.strength + strength, 0, 1);
+
+                UtilityFunc.SetDictionary(dataset, vector_key, p_terrainData);
+                return;
+            }
+
+            dataset.Add(vector_key, new TerrainData() {
+                position = position,
+                rotation = rotation,
+                strength = strength
+            });
         }
 
         private Vector3Int TransformPosition(Vector3 position) {
