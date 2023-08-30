@@ -39,8 +39,6 @@ namespace Hsinpa.Winweed.Terrain
         public void Insert(Vector3 position, Vector3 rotation, float strength) {
             Vector3Int vector_key = TransformPosition(position);
 
-            Debug.Log($"Insert Key {vector_key}");
-
             if (dataset.TryGetValue(vector_key, out TerrainData p_terrainData)) {
                 p_terrainData.rotation = Vector3.Lerp(p_terrainData.rotation, rotation, 0.5f);
                 p_terrainData.strength = Mathf.Clamp(p_terrainData.strength + strength, 0, 1);

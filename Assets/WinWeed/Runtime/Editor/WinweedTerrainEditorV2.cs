@@ -37,18 +37,16 @@ namespace Hsinpa.Winweed.EditorCode
             if (guiEvent.type == EventType.MouseDown)
             {
                 _mouseClickFlag = true;
-               Debug.Log("_mouseClickFlag Down");
             }
 
             if (guiEvent.type == EventType.MouseUp) {
                 _mouseClickFlag = false;
-               Debug.Log("_mouseClickFlag Up" );
             }
 
             if (_mouseClickFlag)
             {
                 Ray worldRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-                //builderV2.ProcessRaycast(worldRay);
+                builderV2.ProcessRaycast(worldRay);
             }
         }
 
