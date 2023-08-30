@@ -2,7 +2,8 @@
     "name": "WinweedEditor",
     "rootNamespace": "",
     "references": [
-        "Winweed"
+        "Winweed",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [
         "Editor"

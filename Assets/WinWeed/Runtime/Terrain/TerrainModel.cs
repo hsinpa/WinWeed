@@ -7,10 +7,18 @@ namespace Hsinpa.Winweed.Terrain
 {
     public class TerrainModel
     {
+        [System.Serializable]
         public struct TerrainData {
             public Vector3 position;
             public Vector3 rotation;
             public float strength;
+        }
+
+
+        [System.Serializable]
+        public struct TerrainTransform
+        {
+            Matrix4x4 localToWorldMatrice;
         }
 
         private int _precision;
@@ -18,10 +26,15 @@ namespace Hsinpa.Winweed.Terrain
 
         private Dictionary<Vector3Int, TerrainData> dataset = new Dictionary<Vector3Int, TerrainData>();
 
-        public TerrainModel(int digitPrecision)
+        public TerrainModel(
+            Transform parentTransform,
+            LayerMask layers,
+            int digitPrecision)
         {
             this._precision = digitPrecision;
         }
+
+
 
         public void Insert(Vector3 position, Vector3 rotation, float strength) {
             Vector3Int vector_key = TransformPosition(position);
@@ -41,7 +54,12 @@ namespace Hsinpa.Winweed.Terrain
                 rotation = rotation,
                 strength = strength
             });
+
+            Debug.Log($"Model Count {dataset.Count}");
+
         }
+
+
 
         private Vector3Int TransformPosition(Vector3 position) {
             var vectorInt =  new Vector3Int();
