@@ -2,7 +2,8 @@
     "name": "Winweed",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:e7d83ec16ac7f3a4d80169da666ed887"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

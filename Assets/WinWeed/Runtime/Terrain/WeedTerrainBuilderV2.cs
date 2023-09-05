@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hsinpa.Winweed.Terrain;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TerrainUtils;
 
 namespace Hsinpa.Winweed
 {
@@ -10,19 +11,17 @@ namespace Hsinpa.Winweed
 
     public class WeedTerrainBuilderV2 : MonoBehaviour
     {
-        Camera selfCamera;
+        [SerializeField]
+        private LayerMask layerMask;
+
+        [SerializeField]
+        private TerrainSRPV2 terrainSRP;
+
         TerrainModel terrainModel;
-
-        private void Start()
-        {
-            selfCamera = this.GetComponent<Camera>();
-            //terrainModel = new TerrainModel(null, 0 << 1, digitPrecision: 1);
-        }
-
 
         private void OnEnable()
         {
-            terrainModel = new TerrainModel(null, 0 << 1, digitPrecision: 1);
+            terrainModel = new TerrainModel(this.transform, layerMask, digitPrecision: 1);
         }
 
         public void ProcessRaycast(Ray ray)
@@ -37,6 +36,28 @@ namespace Hsinpa.Winweed
 
                 terrainModel.Insert(hitInfo.point, hitInfo.normal, 1);
             };
+        }
+
+        public void Save() {
+            if (terrainModel == null || terrainSRP == null) return;
+
+            terrainSRP.Save(terrainModel.DataSet);
+        }
+
+        public void OnDrawGizmos() {
+            Matrix4x4 selfTransform = this.transform.localToWorldMatrix;
+
+            var dataset = terrainModel.DataSet;
+
+            foreach (var d in dataset) {
+                Matrix4x4 data_matrix = selfTransform * d.Value.local_matrix ;
+                Vector3 world_normal = selfTransform * d.Value.normal;
+
+                Gizmos.color = Color.blue;
+
+                Vector3 targetPoint = data_matrix.GetPosition() + (world_normal * 0.1f);
+                Gizmos.DrawLine(data_matrix.GetPosition(), targetPoint);
+            }
         }
     }
 }

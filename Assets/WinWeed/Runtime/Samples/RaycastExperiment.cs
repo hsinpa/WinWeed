@@ -1,3 +1,4 @@
+using Hsinpa.Winweed;
 using Hsinpa.Winweed.Terrain;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,13 @@ public class RaycastExperiment : MonoBehaviour
 {
     [SerializeField] private Transform child_transform;
 
+    [SerializeField]
+    private TerrainSRPV2 terrainSRP;
+
+    Matrix4x4 child_matrix_origin = Matrix4x4.identity;
+
     private void Start() {
+        child_matrix_origin = transform.worldToLocalMatrix * child_transform.localToWorldMatrix;
     }
 
     // Update is called once per frame
@@ -16,13 +23,12 @@ public class RaycastExperiment : MonoBehaviour
     {
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
 
-        Matrix4x4 child_matrix = Matrix4x4.identity;
-        Matrix4x4 parent_matrix = transform.localToWorldMatrix;
+        Matrix4x4 world_matrix = transform.localToWorldMatrix * child_matrix_origin;
 
-        Matrix4x4 new_matrix = child_matrix * parent_matrix;
+        Debug.Log($"Local position {world_matrix.GetPosition()}");
 
-        child_transform.position = new_matrix.GetPosition();
-        child_transform.rotation = new_matrix.rotation;
-        child_transform.localScale = new_matrix.lossyScale;
+        child_transform.position = world_matrix.GetPosition();
+        child_transform.rotation = world_matrix.rotation;
+        child_transform.localScale = world_matrix.lossyScale;
     }
 }

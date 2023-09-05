@@ -1,63 +1,52 @@
 using Hsinpa.Winweed.Uti;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 namespace Hsinpa.Winweed.Terrain
 {
     public class TerrainModel
     {
-        [System.Serializable]
-        public struct TerrainData {
-            public Vector3 position;
-            public Vector3 rotation;
-            public float strength;
-        }
-
-
-        [System.Serializable]
-        public struct TerrainTransform
-        {
-            Matrix4x4 localToWorldMatrice;
-        }
-
         private int _precision;
         public int DigitPrecision => _precision;
 
-        private Dictionary<Vector3Int, TerrainData> dataset = new Dictionary<Vector3Int, TerrainData>();
+        private Transform _parentTransform;
+
+        private Dictionary<Vector3Int, TerrainSRPV2.TerrainData> dataset = new Dictionary<Vector3Int, TerrainSRPV2.TerrainData>();
+        public Dictionary<Vector3Int, TerrainSRPV2.TerrainData>  DataSet => dataset;
 
         public TerrainModel(
             Transform parentTransform,
             LayerMask layers,
             int digitPrecision)
         {
+            this._parentTransform = parentTransform;
             this._precision = digitPrecision;
         }
 
-
-
         public void Insert(Vector3 position, Vector3 rotation, float strength) {
-            Vector3Int vector_key = TransformPosition(position);
+            Matrix4x4 matrix4X4 = Matrix4x4.TRS(position, Quaternion.Euler(rotation.x, rotation.y, rotation.z), Vector3.one);
+            Matrix4x4 local_matrix = _parentTransform.worldToLocalMatrix * matrix4X4;
+            Vector3 local_rotation = _parentTransform.worldToLocalMatrix * rotation;
 
-            if (dataset.TryGetValue(vector_key, out TerrainData p_terrainData)) {
-                p_terrainData.rotation = Vector3.Lerp(p_terrainData.rotation, rotation, 0.5f);
+            Vector3Int vector_key = TransformPosition(local_matrix.GetPosition());
+
+            if (dataset.TryGetValue(vector_key, out TerrainSRPV2.TerrainData p_terrainData)) {
+                p_terrainData.local_matrix = local_matrix;
                 p_terrainData.strength = Mathf.Clamp(p_terrainData.strength + strength, 0, 1);
+                p_terrainData.normal = local_rotation;
 
                 UtilityFunc.SetDictionary(dataset, vector_key, p_terrainData);
                 return;
             }
 
-            dataset.Add(vector_key, new TerrainData() {
-                position = position,
-                rotation = rotation,
+            dataset.Add(vector_key, new TerrainSRPV2.TerrainData() {
+                local_matrix = local_matrix,
+                normal = local_rotation,
                 strength = strength
             });
-
-            Debug.Log($"Model Count {dataset.Count}");
-
         }
-
-
 
         private Vector3Int TransformPosition(Vector3 position) {
             var vectorInt =  new Vector3Int();
