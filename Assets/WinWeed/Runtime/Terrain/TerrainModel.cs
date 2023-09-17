@@ -25,17 +25,29 @@ namespace Hsinpa.Winweed.Terrain
             this._precision = digitPrecision;
         }
 
+        public void Load(List<TerrainSRPV2.TerrainData> terrainDataList) {
+            if (terrainDataList == null) return;
+
+
+            int data_count = terrainDataList.Count;
+
+            for (int i = 0; i < data_count; i++) {
+                UtilityFunc.SetDictionary(dataset, VectorKeyPosition(terrainDataList[i].local_matrix.GetPosition()), terrainDataList[i]);
+            }
+        }
+
         public void Insert(Vector3 position, Vector3 rotation, float strength) {
             Matrix4x4 matrix4X4 = Matrix4x4.TRS(position, Quaternion.Euler(rotation.x, rotation.y, rotation.z), Vector3.one);
             Matrix4x4 local_matrix = _parentTransform.worldToLocalMatrix * matrix4X4;
             Vector3 local_rotation = _parentTransform.worldToLocalMatrix * rotation;
 
-            Vector3Int vector_key = TransformPosition(local_matrix.GetPosition());
+            Vector3 grid_position = GridPosition(local_matrix.GetPosition());
+            Vector3Int vector_key = VectorKeyPosition(grid_position);
 
             if (dataset.TryGetValue(vector_key, out TerrainSRPV2.TerrainData p_terrainData)) {
-                p_terrainData.local_matrix = local_matrix;
+                //p_terrainData.local_matrix = local_matrix;
                 p_terrainData.strength = Mathf.Clamp(p_terrainData.strength + strength, 0, 1);
-                p_terrainData.normal = local_rotation;
+                //p_terrainData.normal = local_rotation;
 
                 UtilityFunc.SetDictionary(dataset, vector_key, p_terrainData);
                 return;
@@ -48,13 +60,18 @@ namespace Hsinpa.Winweed.Terrain
             });
         }
 
-        private Vector3Int TransformPosition(Vector3 position) {
-            var vectorInt =  new Vector3Int();
 
+        private Vector3 GridPosition(Vector3 position) {
             //Round down
             position.x = (float)System.Math.Round(position.x, _precision, System.MidpointRounding.AwayFromZero);
             position.y = (float)System.Math.Round(position.y, _precision, System.MidpointRounding.AwayFromZero);
             position.z = (float)System.Math.Round(position.z, _precision, System.MidpointRounding.AwayFromZero);
+
+            return position;
+        }
+
+        private Vector3Int VectorKeyPosition(Vector3 position) {
+            var vectorInt = new Vector3Int();
 
             //To Int
             double scale = Mathf.Pow(10, _precision);
@@ -67,7 +84,5 @@ namespace Hsinpa.Winweed.Terrain
 
             return vectorInt;
         }
-
-
     }
 }

@@ -18,7 +18,6 @@ public class RaycastExperiment : MonoBehaviour
         child_matrix_origin = transform.worldToLocalMatrix * child_transform.localToWorldMatrix;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;

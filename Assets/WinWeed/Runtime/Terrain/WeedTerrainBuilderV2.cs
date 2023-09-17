@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Hsinpa.Winweed.Terrain;
+using Hsinpa.Winweed.Uti;
+using KdTree.Math;
+using KdTree;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.TerrainUtils;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace Hsinpa.Winweed
 {
@@ -16,12 +21,17 @@ namespace Hsinpa.Winweed
 
         [SerializeField]
         private TerrainSRPV2 terrainSRP;
+        public TerrainSRPV2 TerrainSRP => this.terrainSRP;
 
         TerrainModel terrainModel;
+
+        private KdTree.KdTree<float, Vector3Int> kdTree;
 
         private void OnEnable()
         {
             terrainModel = new TerrainModel(this.transform, layerMask, digitPrecision: 1);
+
+            if (terrainSRP != null) terrainModel.Load(terrainSRP.data);
         }
 
         public void ProcessRaycast(Ray ray)
@@ -42,6 +52,30 @@ namespace Hsinpa.Winweed
             if (terrainModel == null || terrainSRP == null) return;
 
             terrainSRP.Save(terrainModel.DataSet);
+        }
+
+        public Task BuildKDTree() {
+            kdTree = new KdTree<float, Vector3Int>(3, new FloatMath());
+
+            Matrix4x4 selfTransform = this.transform.localToWorldMatrix;
+
+            return Task.Run(() => {
+                var dataset = terrainModel.DataSet;
+
+                foreach (var d in dataset) {
+                    Matrix4x4 data_matrix = selfTransform * d.Value.local_matrix;
+                    Vector3 targetPoint = data_matrix.GetPosition();
+
+                    kdTree.Add(new[] { targetPoint.x, targetPoint.y, targetPoint.z }, d.Key);
+                }
+            });
+        }
+
+        public WeedStatic.PaintedWeedStruct GetPainteWeedStruct() {
+            int count = terrainSRP.data.Count;
+            int random_point = UtilityFunc.RandomRange(0, count);
+
+            return default(WeedStatic.PaintedWeedStruct);
         }
 
         public void OnDrawGizmos() {

@@ -7,13 +7,11 @@ using System;
 namespace Hsinpa.Winweed.EditorCode
 {
     [CustomEditor(typeof(WeedTerrainBuilderV2))]
-
     public class WinweedTerrainEditorV2 : Editor
     {
         private WeedTerrainBuilderV2 builderV2;
         private bool _mouseClickFlag;
         System.Random rnd = new System.Random();
-
 
         public override void OnInspectorGUI()
         {
@@ -32,7 +30,6 @@ namespace Hsinpa.Winweed.EditorCode
             Input(guiEvent);
         }
 
-
         void Input(Event guiEvent)
         {
             if (builderV2 == null) return;
@@ -44,6 +41,10 @@ namespace Hsinpa.Winweed.EditorCode
 
             if (guiEvent.type == EventType.MouseUp) {
                 _mouseClickFlag = false;
+
+                builderV2.Save();
+
+                builderV2.BuildKDTree();
             }
 
             if (_mouseClickFlag)

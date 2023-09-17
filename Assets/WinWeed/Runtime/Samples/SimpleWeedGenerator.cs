@@ -191,7 +191,6 @@ namespace Hsinpa.Winweed
             this._material = (PreviewMode) ? material : new Material(material);
             this.m_bound = new Bounds(m_bound_position, m_bound_size);
 
-
             this.m_grassMeshConstructor = new GrassMesh();
             this.m_mesh = this.m_grassMeshConstructor.CreateMesh(height: p_grass_height, width: p_grass_width, sharpness: p_grass_sharpness, segment: SEGMENT);
 

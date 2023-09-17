@@ -18,5 +18,18 @@ namespace Hsinpa.Winweed {
             public const string Wind_Direction = "u_wind_direction";
             public const string Wind_Strength = "u_wind_strength";
         }
+        
+        [System.Serializable]
+        public struct PaintedWeedStruct {
+            public Vector3 position;
+            public float weight;
+        }
+
+        [System.Serializable]
+        public struct WindConfig{
+            public Vector3 wind_direction;
+            public float wind_strength;
+        }
+
     }
 }

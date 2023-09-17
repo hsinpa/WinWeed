@@ -64,6 +64,16 @@ namespace Hsinpa.Winweed.Uti
         }
 
 
+        public static Dictionary<string, List<T>> SetListDictionary<T>(Dictionary<string, List<T>> dict, string id, T dataStruct) {
+            if (dict.ContainsKey(id)) {
+                dict[id].Add(dataStruct);
+            } else {
+                dict.Add(id, new List<T>() { dataStruct });
+            }
+            return dict;
+        }
+
+
         public static void DeleteObject(GameObject p_object)
         {
             if (Application.isPlaying) GameObject.Destroy(p_object);
