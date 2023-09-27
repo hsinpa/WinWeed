@@ -22,6 +22,8 @@ namespace Hsinpa.Winweed {
         [System.Serializable]
         public struct PaintedWeedStruct {
             public Vector3 position;
+            public Vector3? normal;
+
             public float weight;
         }
 

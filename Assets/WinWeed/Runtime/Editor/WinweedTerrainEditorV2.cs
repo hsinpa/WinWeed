@@ -82,6 +82,8 @@ namespace Hsinpa.Winweed.EditorCode
         private void OnEnable()
         {
             builderV2 = (WeedTerrainBuilderV2)target;
+            builderV2.SetUp();
+
             SceneView.duringSceneGui += OnSceneGUI;
         }
 

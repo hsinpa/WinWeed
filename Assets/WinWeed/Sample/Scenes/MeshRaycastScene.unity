@@ -370,6 +370,28 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   terrainSRP: {fileID: 11400000, guid: 644f63a4e0949d14d9c2dc62e813f7ab, type: 2}
+--- !u!114 &1016554438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016554426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8bd11277f354f4580c578e8096c4d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
+  instance_count: 10
+  grass_height: 1
+  grass_width: 0.02
+  grass_sharpness: 0.3
+  random_strength: 0
+  wind_config:
+    wind_direction: {x: 0, y: 0, z: 0}
+    wind_strength: 0
+  wind_strength: 0
 --- !u!1001 &1364879981
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -387,7 +409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 716cd2599fd97274ab5a2d246355428e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.18
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 716cd2599fd97274ab5a2d246355428e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -395,7 +417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 716cd2599fd97274ab5a2d246355428e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.01
+      value: 0.27
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 716cd2599fd97274ab5a2d246355428e, type: 3}
       propertyPath: m_LocalRotation.w
