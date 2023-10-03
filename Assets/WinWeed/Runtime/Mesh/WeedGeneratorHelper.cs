@@ -67,8 +67,7 @@ namespace Hsinpa.Winweed
             if (p_spawn_count <= 0) {
                 return;
             }
-
-            Debug.Log("CreateGrassBufferData");
+            Debug.Log("Start CreateGrassBufferData");
 
             this.m_grassMeshConstructor = new GrassMesh();
             this.m_mesh = this.m_grassMeshConstructor.CreateMesh(height: p_grass_height, width: p_grass_width, sharpness: p_grass_sharpness, segment: this.m_grass_segment);
@@ -90,6 +89,8 @@ namespace Hsinpa.Winweed
             this.m_material.SetBuffer("_Properties", this.m_meshCommandBuffer);
 
             this.weed_ready_flag = true;
+
+            Debug.Log("End CreateGrassBufferData");
         }
 
         public static ComputeBuffer GetCommandShaderArg(Mesh grassMesh, int instance_count) {
@@ -110,13 +111,13 @@ namespace Hsinpa.Winweed
                                                                 int seed, System.Func<WeedStatic.PaintedWeedStruct> GetRandomPointFunc) {
             MeshProperties[] properties = new MeshProperties[instance_count];
             if (instance_count <= 0) return properties;
+            UtilityFunc.SetRandomSeed(seed);
 
             await Task.Run(() => {
                 Vector3 scale = Vector3.one;
 
                 Parallel.For(0, instance_count, i => {
-                    UtilityFunc.SetRandomSeed(seed + i);
-                    MeshProperties props = new MeshProperties();
+                    MeshProperties props = properties[i];
 
                     var paintedWeedStruct = GetRandomPointFunc();
 
