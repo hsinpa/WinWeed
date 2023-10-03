@@ -96,6 +96,9 @@ namespace Hsinpa.Winweed
                 Vector3 targetPoint = data_matrix.GetPosition() + (world_normal * 0.1f);
                 Gizmos.DrawLine(data_matrix.GetPosition(), targetPoint);
             }
+            
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(selfTransform.GetPosition() + terrainSRP.Bounds.center, terrainSRP.Bounds.size);
         }
     }
 }

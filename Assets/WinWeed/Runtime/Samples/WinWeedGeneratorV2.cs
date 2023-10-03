@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Hsinpa.Winweed
 {
-    [RequireComponent(typeof(WeedTerrainBuilderV2)), ExecuteInEditMode]
+    [RequireComponent(typeof(WeedTerrainBuilderV2))]
     public class WinWeedGeneratorV2 : MonoBehaviour
     {
         [Header("Basic Config")]
@@ -47,14 +47,13 @@ namespace Hsinpa.Winweed
         Matrix4x4 m_transfromMatrix;
         float[] m_kd_tree_key_cache = new float[3];
 
-        public void ReDraw(int p_instance_count = 0) {
+        private async void ConstructGrassMesh(int p_instance_count = 0) {
 
             if (this.m_PropertyBlock == null)
                 this.m_PropertyBlock = new MaterialPropertyBlock();
 
-            m_weedGeneratorHelper.CreateGrassBufferData(m_weedTerrainBuilderV2.TerrainSRP.Bounds, p_instance_count, grass_height, grass_width, grass_sharpness);
+             m_weedGeneratorHelper.CreateGrassBufferData(p_instance_count, grass_height, grass_width, grass_sharpness);
 
-            Debug.Log("ReDraw");
         }
 
         private WeedStatic.PaintedWeedStruct GetPainteWeedStruct() {
@@ -74,19 +73,19 @@ namespace Hsinpa.Winweed
             Vector3 average_position = world_matrix.GetPosition();
             Vector3 average_normal = m_transfromMatrix * terrainData.normal;
 
-            foreach (var d in radial_search) {
-                float ratio = UtilityFunc.RandomRange(0f, 1f);
+            // foreach (var d in radial_search) {
+            //     float ratio = UtilityFunc.RandomRange(0f, 1f);
 
-                if (m_weedTerrainBuilderV2.TerrainModel.DataSet.TryGetValue(d.Value, out var neighborTerrain)) {
-                    Matrix4x4 world_neighbor_matrix = m_transfromMatrix * neighborTerrain.local_matrix;
+            //     if (m_weedTerrainBuilderV2.TerrainModel.DataSet.TryGetValue(d.Value, out var neighborTerrain)) {
+            //         Matrix4x4 world_neighbor_matrix = m_transfromMatrix * neighborTerrain.local_matrix;
 
-                    Vector3 world_neighbor_position = world_neighbor_matrix.GetPosition();
-                    Vector3 world_neighbor_normal = m_transfromMatrix * neighborTerrain.normal;
+            //         Vector3 world_neighbor_position = world_neighbor_matrix.GetPosition();
+            //         Vector3 world_neighbor_normal = m_transfromMatrix * neighborTerrain.normal;
 
-                    average_position = Vector3.Lerp(average_position, world_neighbor_position, ratio);
-                    average_normal = Vector3.Lerp(average_normal, world_neighbor_normal, ratio);
-                }
-            }
+            //         average_position = Vector3.Lerp(average_position, world_neighbor_position, ratio);
+            //         average_normal = Vector3.Lerp(average_normal, world_neighbor_normal, ratio);
+            //     }
+            // }
 
             return new WeedStatic.PaintedWeedStruct {
                 weight = terrainData.strength,
@@ -101,16 +100,20 @@ namespace Hsinpa.Winweed
 
             m_weedTerrainBuilderV2 = GetComponent<WeedTerrainBuilderV2>();
             m_weedTerrainBuilderV2.SetUp();
-            m_weedGeneratorHelper = new WeedGeneratorHelper(material, SEGMENT, wind_config, GetPainteWeedStruct);
+
+            Bounds transfrom_bound = m_weedTerrainBuilderV2.TerrainSRP.Bounds;
+            transfrom_bound.center = m_transfromMatrix * transfrom_bound.center;
+
+            m_weedGeneratorHelper = new WeedGeneratorHelper(material, transfrom_bound, SEGMENT, wind_config, GetPainteWeedStruct);
 
             await m_weedTerrainBuilderV2.BuildKDTree();
-            kdtree_ready = true;
 
-            ReDraw(instance_count);
+            this.ConstructGrassMesh(this.instance_count);
+            kdtree_ready = true;
         }
 
         private void Update() {
-            //ReDraw(instance_count);
+            this.m_weedGeneratorHelper.Render();
         }
         #endregion
     }

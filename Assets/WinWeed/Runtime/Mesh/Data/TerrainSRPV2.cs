@@ -20,23 +20,32 @@ namespace Hsinpa.Winweed
             foreach (var keyPair in dict) {
                 data.Add(keyPair.Value);
 
-                if (keyPair.Key.y > top) top = keyPair.Key.y;
-                if (keyPair.Key.y < bottom) bottom = keyPair.Key.y;
+                var position = keyPair.Value.local_matrix.GetPosition();
 
-                if (keyPair.Key.x > right) right = keyPair.Key.x;
-                if (keyPair.Key.x < left) left = keyPair.Key.x;
+                if (position.y > top) top = position.y;
+                if (position.y < bottom) bottom = position.y;
 
-                if (keyPair.Key.z > front) front = keyPair.Key.z;
-                if (keyPair.Key.z < back) back = keyPair.Key.z;
+                if (position.x > right) right = position.x;
+                if (position.x < left) left = position.x;
+
+                if (position.z > front) front = position.z;
+                if (position.z < back) back = position.z;
             }
 
-            Vector3 size = new Vector3() {
+            Vector3 bound_size = new Vector3() {
                 x = right - left,
                 y = top - bottom,
                 z = front - back
             };
 
-            Bounds.size = size;
+            Vector3 bound_position = new Vector3();
+            bound_position.y = bottom + (bound_size.y * 0.5f);
+            bound_position.x = left + (bound_size.x * 0.5f);
+            bound_position.z = back + (bound_size.z * 0.5f);
+
+
+            Bounds.size = bound_size;
+            Bounds.center = bound_position;
         }
 
         [System.Serializable]

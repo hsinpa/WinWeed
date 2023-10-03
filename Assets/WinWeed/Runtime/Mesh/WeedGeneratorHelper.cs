@@ -19,10 +19,13 @@ namespace Hsinpa.Winweed
         private GrassMesh m_grassMeshConstructor;
         private MaterialPropertyBlock m_PropertyBlock;
         private Material m_material;
-
+        private Bounds m_bound;
         private int m_grass_segment;
         private WeedStatic.WindConfig m_windConfig;
         private System.Func<WeedStatic.PaintedWeedStruct> m_getRandomPointFunc;
+
+        public bool WeedReadyFlag => weed_ready_flag;
+        private bool weed_ready_flag = false;
 
         public struct MeshProperties
         {
@@ -41,26 +44,36 @@ namespace Hsinpa.Winweed
             }
         }
 
-        public WeedGeneratorHelper(Material material, int grass_segment, WeedStatic.WindConfig windConfig,
+        public WeedGeneratorHelper(Material material, Bounds bounds, int grass_segment, WeedStatic.WindConfig windConfig,
                                     System.Func<WeedStatic.PaintedWeedStruct> getRandomPointFunc) {
 
             this.m_grassMeshConstructor = new GrassMesh();
             this.m_PropertyBlock = new MaterialPropertyBlock();
             this.m_material = material;
+            this.m_bound = bounds;
             this.m_grass_segment = grass_segment;
             this.m_windConfig = windConfig;
             this.m_getRandomPointFunc = getRandomPointFunc;
         }
 
-        public async void CreateGrassBufferData(Bounds bound, int p_spawn_count, float p_grass_height, float p_grass_width, float p_grass_sharpness) {
+        public void Render() {
+            if (!this.weed_ready_flag) return;
+
+            Graphics.DrawMeshInstancedIndirect(this.m_mesh, 0, this.m_material, this.m_bound, this.m_argsCommandBuffer, properties: this.m_PropertyBlock,
+                                castShadows: UnityEngine.Rendering.ShadowCastingMode.On);
+        }
+
+        public async void CreateGrassBufferData(int p_spawn_count, float p_grass_height, float p_grass_width, float p_grass_sharpness) {
             if (p_spawn_count <= 0) {
                 return;
             }
 
+            Debug.Log("CreateGrassBufferData");
+
             this.m_grassMeshConstructor = new GrassMesh();
             this.m_mesh = this.m_grassMeshConstructor.CreateMesh(height: p_grass_height, width: p_grass_width, sharpness: p_grass_sharpness, segment: this.m_grass_segment);
 
-            Vector3 spawnCenterPosition = bound.center;
+            Vector3 spawnCenterPosition = this.m_bound.center;
                     spawnCenterPosition.y -= p_grass_height * 0.5f;
 
             this.m_argsCommandBuffer = GetCommandShaderArg(this.m_mesh, p_spawn_count);
@@ -75,6 +88,8 @@ namespace Hsinpa.Winweed
             this.m_PropertyBlock.SetFloat(WeedStatic.ShaderProperties.Wind_Strength, this.m_windConfig.wind_strength);
 
             this.m_material.SetBuffer("_Properties", this.m_meshCommandBuffer);
+
+            this.weed_ready_flag = true;
         }
 
         public static ComputeBuffer GetCommandShaderArg(Mesh grassMesh, int instance_count) {
@@ -151,8 +166,6 @@ namespace Hsinpa.Winweed
             if (this.m_argsCommandBuffer != null)
                 this.m_argsCommandBuffer.Release();
             this.m_argsCommandBuffer = null;
-
         }
-
     }
 }

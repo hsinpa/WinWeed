@@ -45,6 +45,8 @@ namespace Hsinpa.Winweed.EditorCode
                 builderV2.Save();
 
                 builderV2.BuildKDTree();
+
+                EditorUtility.SetDirty(builderV2.TerrainSRP);
             }
 
             if (_mouseClickFlag)

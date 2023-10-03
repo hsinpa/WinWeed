@@ -131,14 +131,13 @@ Shader "Hsinpa/WeedShader"
 
                 //Calculate bezier curve
                 float t = v.vertex.y / _Properties[instanceID].a_height;
-                //v.vertex.y = 0;
                 float4 bezier_vertex_pos = float4(BezierCurve(_Properties[instanceID].a_bezier_startpoint, bezier_startctrl, bezier_endpoint, bezier_endctrl, t), 0);
                 float4 offset = bezier_vertex_pos - v.vertex;
                 v.vertex -= offset;
 
                 //Trace Weight
-                half trace_weight = FindTraceWeight(absolute_pos.xyz);
-                //half trace_weight = 0.0;
+                //half trace_weight = FindTraceWeight(absolute_pos.xyz);
+                half trace_weight = 0.0;
 
                 half3 fall_direction = (_Properties[instanceID].a_bezier_endctrl - _Properties[instanceID].a_bezier_endpoint);
                 half fall_length = length(fall_direction);
@@ -153,7 +152,6 @@ Shader "Hsinpa/WeedShader"
                 float3 world_normal = mul((float3x3)_Properties[instanceID].a_mat, v.normal);
 
                 o.vertex_CS = TransformWorldToHClip(pos.xyz);
-                //o.vertex_WS = TransformObjectToWorld(pos.xyz);
                 o.vertex_WS = pos.xyz;
 
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
@@ -171,7 +169,7 @@ Shader "Hsinpa/WeedShader"
                 //float lightWeight = dot(-lightDirWS, i.normal);
 
                 float4 diffuseColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 depthColor = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, i.uv);
+                //float4 depthColor = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, i.uv);
 
                 float4 shadowCoord = TransformWorldToShadowCoord(i.vertex_WS);
                 Light mainLight = GetMainLight(shadowCoord);
@@ -184,9 +182,9 @@ Shader "Hsinpa/WeedShader"
 
                 float3 ambientLight = lightColor * 0.1;
 
-                //color.rgb = max(minDotLN, abs(dot(lightDir, normalWS))) * lightColor * diffuseColor.rgb * _MainColor.rgb * mainLight.shadowAttenuation;
-                //color.rgb += ambientLight;
-                color.rgb = depthColor.rgb;
+                color.rgb = max(minDotLN, abs(dot(lightDir, normalWS))) * lightColor * diffuseColor.rgb * _MainColor.rgb * mainLight.shadowAttenuation;
+                color.rgb += ambientLight;
+                //color.rgb = depthColor.rgb;
                 //half3 texture_col = ((SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv) * _MainColor).xyz * light.color * lightWeight) + ambientLight;
 
                 return color;
