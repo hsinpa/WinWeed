@@ -7,7 +7,7 @@ namespace Hsinpa.Winweed
     [System.Serializable, CreateAssetMenu(fileName = "TerrainSRPV2", menuName = "SRP/WinWeed/Create TerrainSRPV2", order = 2)]
     public class TerrainSRPV2 : ScriptableObject
     {
-        public List<TerrainData> data = new List<TerrainData>();
+        public List<TerrainData> data;
 
         public int Count => data.Count;
         public Bounds Bounds;

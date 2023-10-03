@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TerrainUtils;
 
 namespace Hsinpa.Winweed
 {
@@ -52,13 +53,18 @@ namespace Hsinpa.Winweed
             if (this.m_PropertyBlock == null)
                 this.m_PropertyBlock = new MaterialPropertyBlock();
 
-             m_weedGeneratorHelper.CreateGrassBufferData(p_instance_count, grass_height, grass_width, grass_sharpness);
+            if (m_weedTerrainBuilderV2.TerrainSRP.data == null ||
+                m_weedTerrainBuilderV2.TerrainSRP.data.Count <= 0) return;
 
+             m_weedGeneratorHelper.CreateGrassBufferData(p_instance_count, grass_height, grass_width, grass_sharpness);
         }
 
         private WeedStatic.PaintedWeedStruct GetPainteWeedStruct() {
             var terrainSRP = m_weedTerrainBuilderV2.TerrainSRP;
             int random_terrain_index = UtilityFunc.RandomRange(0, terrainSRP.Count);
+
+            if (terrainSRP.data.Count < random_terrain_index) return default(WeedStatic.PaintedWeedStruct);
+
             TerrainSRPV2.TerrainData terrainData = terrainSRP.data[random_terrain_index];
 
             Matrix4x4 world_matrix = m_transfromMatrix * terrainData.local_matrix ;
