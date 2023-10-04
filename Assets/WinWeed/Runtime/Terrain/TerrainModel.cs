@@ -1,7 +1,10 @@
 using Hsinpa.Winweed.Uti;
+using KdTree;
+using KdTree.Math;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Hsinpa.Winweed.Terrain
@@ -15,6 +18,9 @@ namespace Hsinpa.Winweed.Terrain
 
         private Dictionary<Vector3Int, TerrainSRPV2.TerrainData> dataset = new Dictionary<Vector3Int, TerrainSRPV2.TerrainData>();
         public Dictionary<Vector3Int, TerrainSRPV2.TerrainData>  DataSet => dataset;
+
+        private KdTree.KdTree<float, Vector3Int> kdTree = new KdTree<float, Vector3Int>(3, new FloatMath());
+        public KdTree.KdTree<float, Vector3Int> KDTree => kdTree;
 
         public TerrainModel(
             Transform parentTransform,
@@ -60,6 +66,22 @@ namespace Hsinpa.Winweed.Terrain
             });
         }
 
+        public Task BuildKDTree()
+        {
+            kdTree.Clear();
+
+            Matrix4x4 selfTransform = _parentTransform.localToWorldMatrix;
+
+            return Task.Run(() => {
+                foreach (var d in this.dataset)
+                {
+                    Matrix4x4 data_matrix = d.Value.local_matrix;
+                    Vector3 targetPoint = data_matrix.GetPosition();
+
+                    kdTree.Add(new[] { targetPoint.x, targetPoint.y, targetPoint.z }, d.Key);
+                }
+            });
+        }
 
         private Vector3 GridPosition(Vector3 position) {
             //Round down

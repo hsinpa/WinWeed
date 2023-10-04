@@ -26,9 +26,6 @@ namespace Hsinpa.Winweed
         private TerrainModel terrainModel;
         public TerrainModel TerrainModel => terrainModel;
 
-        private KdTree.KdTree<float, Vector3Int> kdTree = new KdTree<float, Vector3Int>(3, new FloatMath());
-        public KdTree.KdTree<float, Vector3Int> KDTree => kdTree;
-
         public void SetUp()
         {
             terrainModel = new TerrainModel(this.transform, layerMask, digitPrecision: 1);
@@ -54,23 +51,6 @@ namespace Hsinpa.Winweed
             if (terrainModel == null || terrainSRP == null) return;
 
             terrainSRP.Save(terrainModel.DataSet);
-        }
-
-        public Task BuildKDTree() {
-            kdTree.Clear();
-
-            Matrix4x4 selfTransform = this.transform.localToWorldMatrix;
-
-            return Task.Run(() => {
-                var dataset = terrainModel.DataSet;
-
-                foreach (var d in dataset) {
-                    Matrix4x4 data_matrix = d.Value.local_matrix;
-                    Vector3 targetPoint = data_matrix.GetPosition();
-
-                    kdTree.Add(new[] { targetPoint.x, targetPoint.y, targetPoint.z }, d.Key);
-                }
-            });
         }
 
         public WeedStatic.PaintedWeedStruct GetPainteWeedStruct() {
