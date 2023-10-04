@@ -28,7 +28,7 @@ namespace Hsinpa.Winweed
 
         public void SetUp()
         {
-            terrainModel = new TerrainModel(this.transform, layerMask, digitPrecision: 1);
+            terrainModel = new TerrainModel(this.transform, layerMask, digitPrecision:1);
 
             if (terrainSRP != null) terrainModel.Load(terrainSRP.data);
         }
