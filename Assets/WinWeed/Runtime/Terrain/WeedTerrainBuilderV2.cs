@@ -23,8 +23,16 @@ namespace Hsinpa.Winweed
         private TerrainSRPV2 terrainSRP;
         public TerrainSRPV2 TerrainSRP => this.terrainSRP;
 
+        [Header("Configuration")]
+        [SerializeField]
+        private float paintEffectRange = 1;
+        public float PaintEffectRange => paintEffectRange;
+
         private TerrainModel terrainModel;
         public TerrainModel TerrainModel => terrainModel;
+
+        private const int PHYSICS_HIT_MAX = 2;
+        private RaycastHit[] physicsHits = new RaycastHit[PHYSICS_HIT_MAX];
 
         public void SetUp()
         {
@@ -35,14 +43,14 @@ namespace Hsinpa.Winweed
 
         public void ProcessRaycast(Ray ray)
         {
-            if (terrainModel != null && Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance: 50))
+            if (terrainModel != null && Physics.RaycastNonAlloc(ray, physicsHits, maxDistance: 50) > 0)
             {
                 //Debug.Log($"Ray origin {hitInfo.point}");
                 //Debug.Log($"Ray triangleIndex {hitInfo.triangleIndex}");
                 //Debug.Log($"Ray barycentricCoordinate {hitInfo.barycentricCoordinate}");
                 //Debug.Log($"Ray normal {hitInfo.normal}");
                 //Debug.Log($"Ray uv {hitInfo.textureCoord}");
-
+                RaycastHit hitInfo = physicsHits[0];
                 terrainModel.Insert(hitInfo.point, hitInfo.normal, 1);
             };
         }

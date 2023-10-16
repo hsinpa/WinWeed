@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 5a21603d3e2774063842b0ece0491110
+guid: 2a21803af6690f24698170ae31c944bb
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - PaintRadiusViewPrefab: {fileID: 8229222143594151104, guid: 536cce1d8ec2cca4aa7a05023653e096, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

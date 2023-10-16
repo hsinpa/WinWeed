@@ -273,6 +273,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   terrainSRP: {fileID: 11400000, guid: 644f63a4e0949d14d9c2dc62e813f7ab, type: 2}
+  paintEffectRange: 0.54
 --- !u!114 &1016554438
 MonoBehaviour:
   m_ObjectHideFlags: 0
