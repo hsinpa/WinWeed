@@ -24,15 +24,22 @@ namespace Hsinpa.Winweed
         public TerrainSRPV2 TerrainSRP => this.terrainSRP;
 
         [Header("Configuration")]
-        [SerializeField]
+        [SerializeField, Range(0.1f, 100)]
         private float paintEffectRange = 1;
         public float PaintEffectRange => paintEffectRange;
+
+        public enum EditorState { Preview, Render, Edit }
+        public EditorState editorState;
+
+        public enum PaintState { Append, Delete }
+        public PaintState paintState;
 
         private TerrainModel terrainModel;
         public TerrainModel TerrainModel => terrainModel;
 
         private const int PHYSICS_HIT_MAX = 2;
         private RaycastHit[] physicsHits = new RaycastHit[PHYSICS_HIT_MAX];
+        private float[] vector_cache = new float[3];
 
         public void SetUp()
         {
@@ -53,6 +60,14 @@ namespace Hsinpa.Winweed
                 RaycastHit hitInfo = physicsHits[0];
                 terrainModel.Insert(hitInfo.point, hitInfo.normal, 1);
             };
+        }
+
+        public void RemoveWeedFromRange(Vector3 center, float radius) {
+            vector_cache[0] = center.x;
+            vector_cache[1] = center.y;
+            vector_cache[2] = center.z;
+
+            var find_nodes = terrainModel.KDTree.RadialSearch(vector_cache, radius);
         }
 
         public void Save() {

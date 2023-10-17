@@ -18,6 +18,9 @@ namespace Hsinpa.Winweed.EditorCode
         PaintRadiusView _paintRadiusView;
         private RaycastHit[] physicsHits = new RaycastHit[1];
 
+        private Color32 EditColor = new Color32(124, 216, 243, 255);
+        private Color32 EraseColor = new Color32(214, 66, 82, 255);
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -33,6 +36,8 @@ namespace Hsinpa.Winweed.EditorCode
 
         private void OnSceneGUI(SceneView sceneView)
         {
+            if (builderV2.editorState != WeedTerrainBuilderV2.EditorState.Edit) return;
+            
             SceneView.RepaintAll();
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
@@ -103,6 +108,11 @@ namespace Hsinpa.Winweed.EditorCode
                 _paintRadiusView.gameObject.SetActive(true);
                 _paintRadiusView.transform.position = physicsHits[0].point;
                 return;
+            }
+
+            if (builderV2 != null)
+            {
+                _paintRadiusView.SetColor(builderV2.paintState == WeedTerrainBuilderV2.PaintState.Append ? WeedStatic.Color.EditColor : WeedStatic.Color.EraseColor);
             }
 
             _paintRadiusView.gameObject.SetActive(false);

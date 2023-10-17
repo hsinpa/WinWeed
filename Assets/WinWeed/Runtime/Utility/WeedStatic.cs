@@ -33,5 +33,9 @@ namespace Hsinpa.Winweed {
             public float wind_strength;
         }
 
+        public class Color {
+            public static Color32 EditColor = new Color32(124, 216, 243, 255);
+            public static Color32 EraseColor = new Color32(214, 66, 82, 255);
+        }
     }
 }
