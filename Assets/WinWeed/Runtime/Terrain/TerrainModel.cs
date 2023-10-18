@@ -16,8 +16,7 @@ namespace Hsinpa.Winweed.Terrain
 
         private Transform _parentTransform;
 
-        private Dictionary<Vector3Int, TerrainSRPV2.TerrainData> dataset = new Dictionary<Vector3Int, TerrainSRPV2.TerrainData>();
-        public Dictionary<Vector3Int, TerrainSRPV2.TerrainData>  DataSet => dataset;
+        public Dictionary<Vector3Int, TerrainSRPV2.TerrainData> dataSet = new Dictionary<Vector3Int, TerrainSRPV2.TerrainData>();
 
         private KdTree.KdTree<float, Vector3Int> kdTree = new KdTree<float, Vector3Int>(3, new FloatMath());
         public KdTree.KdTree<float, Vector3Int> KDTree => kdTree;
@@ -38,7 +37,7 @@ namespace Hsinpa.Winweed.Terrain
             int data_count = terrainDataList.Count;
 
             for (int i = 0; i < data_count; i++) {
-                UtilityFunc.SetDictionary(dataset, VectorKeyPosition(terrainDataList[i].local_matrix.GetPosition()), terrainDataList[i]);
+                UtilityFunc.SetDictionary(dataSet, VectorKeyPosition(terrainDataList[i].local_matrix.GetPosition()), terrainDataList[i]);
             }
         }
 
@@ -50,16 +49,16 @@ namespace Hsinpa.Winweed.Terrain
             Vector3 grid_position = GridPosition(local_matrix.GetPosition());
             Vector3Int vector_key = VectorKeyPosition(grid_position);
 
-            if (dataset.TryGetValue(vector_key, out TerrainSRPV2.TerrainData p_terrainData)) {
+            if (dataSet.TryGetValue(vector_key, out TerrainSRPV2.TerrainData p_terrainData)) {
                 //p_terrainData.local_matrix = local_matrix;
                 p_terrainData.strength = Mathf.Clamp(p_terrainData.strength + strength, 0, 1);
                 //p_terrainData.normal = local_rotation;
 
-                UtilityFunc.SetDictionary(dataset, vector_key, p_terrainData);
+                UtilityFunc.SetDictionary(dataSet, vector_key, p_terrainData);
                 return;
             }
 
-            dataset.Add(vector_key, new TerrainSRPV2.TerrainData() {
+            dataSet.Add(vector_key, new TerrainSRPV2.TerrainData() {
                 local_matrix = local_matrix,
                 normal = local_rotation,
                 strength = strength
@@ -73,7 +72,7 @@ namespace Hsinpa.Winweed.Terrain
             Matrix4x4 selfTransform = _parentTransform.localToWorldMatrix;
 
             return Task.Run(() => {
-                foreach (var d in this.dataset)
+                foreach (var d in this.dataSet)
                 {
                     Matrix4x4 data_matrix = d.Value.local_matrix;
                     Vector3 targetPoint = data_matrix.GetPosition();

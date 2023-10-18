@@ -6,6 +6,11 @@ using System;
 
 namespace Hsinpa.Winweed.EditorCode
 {
+    public struct RaycastContactStruct {
+        public Vector3 contact_point;
+        public bool is_contact;
+    }
+
     [CustomEditor(typeof(WeedTerrainBuilderV2))]
     public class WinweedTerrainEditorV2 : Editor
     {
@@ -20,6 +25,7 @@ namespace Hsinpa.Winweed.EditorCode
 
         private Color32 EditColor = new Color32(124, 216, 243, 255);
         private Color32 EraseColor = new Color32(214, 66, 82, 255);
+        RaycastContactStruct _raycastContactStruct = new RaycastContactStruct();
 
         public override void OnInspectorGUI()
         {
@@ -68,46 +74,62 @@ namespace Hsinpa.Winweed.EditorCode
                 EditorUtility.SetDirty(builderV2.TerrainSRP);
             }
 
+            RaycastContactStruct contact_struct = ProcessPaintRadiusDecay(worldRay);
+
             if (_mouseClickFlag)
             {
-                ProcessGroupRaycast(worldRay, max_ray_count: 50);
+                ProcessGroupRaycast(worldRay, max_ray_count: 50, contact_struct);
             }
 
-            ProcessPaintRadiusDecay(worldRay);
         }
 
-        private void ProcessGroupRaycast(Ray worldRay, int max_ray_count) {
+        private void ProcessGroupRaycast(Ray worldRay, int max_ray_count, RaycastContactStruct contact_struct) {
             Vector3 right_dir = Vector3.Cross(worldRay.direction, Vector3.up).normalized;
             Vector3 up_dir = Vector3.Cross(worldRay.direction, right_dir).normalized;
-
-            builderV2.ProcessRaycast(worldRay);
 
             float radius = builderV2.PaintEffectRange * 0.5f;
             Vector3 original_pos = worldRay.origin;
 
-            for (int i = 0; i < max_ray_count; i++) {
-                float random_x = (float)(rnd.NextDouble() * 2 - 1) * radius;
-                float random_y = (float)(rnd.NextDouble() * 2 - 1) * radius;
-
-                Vector3 offset_position = original_pos + (right_dir * random_x) + (up_dir * random_y);
-
-                float dist = Vector3.Distance(offset_position, original_pos);
-
-                if (dist > radius) continue;
-                worldRay.origin = offset_position;
-
+            if (builderV2.paintState == WeedTerrainBuilderV2.PaintState.Append)
+            {
                 builderV2.ProcessRaycast(worldRay);
+
+                for (int i = 0; i < max_ray_count; i++)
+                {
+                    float random_x = (float)(rnd.NextDouble() * 2 - 1) * radius;
+                    float random_y = (float)(rnd.NextDouble() * 2 - 1) * radius;
+
+                    Vector3 offset_position = original_pos + (right_dir * random_x) + (up_dir * random_y);
+
+                    float dist = Vector3.Distance(offset_position, original_pos);
+
+                    if (dist > radius) continue;
+                    worldRay.origin = offset_position;
+
+                    builderV2.ProcessRaycast(worldRay);
+                }
+            }
+
+            if (builderV2.paintState == WeedTerrainBuilderV2.PaintState.Delete && contact_struct.is_contact)
+            {
+                builderV2.RemoveWeedFromRange(contact_struct.contact_point, radius);
             }
         }
 
-        private void ProcessPaintRadiusDecay(Ray worldRay) {
+        private RaycastContactStruct ProcessPaintRadiusDecay(Ray worldRay) {
+            _raycastContactStruct.is_contact = false;
             int hit_lens = Physics.RaycastNonAlloc(worldRay, physicsHits, maxDistance: 50);
+
 
             if (hit_lens > 0)
             {
                 _paintRadiusView.gameObject.SetActive(true);
                 _paintRadiusView.transform.position = physicsHits[0].point;
-                return;
+
+                _raycastContactStruct.is_contact = true;
+                _raycastContactStruct.contact_point = _paintRadiusView.transform.position;
+
+                return _raycastContactStruct;
             }
 
             if (builderV2 != null)
@@ -116,6 +138,8 @@ namespace Hsinpa.Winweed.EditorCode
             }
 
             _paintRadiusView.gameObject.SetActive(false);
+
+            return _raycastContactStruct;
         }
 
         private void FindOrCreatePaintRadiusView() {

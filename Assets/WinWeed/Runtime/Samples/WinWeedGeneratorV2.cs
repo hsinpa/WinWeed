@@ -128,7 +128,7 @@ namespace Hsinpa.Winweed
             m_weedGeneratorHelper = new WeedGeneratorHelper(material, transfrom_bound, SEGMENT, wind_config, GetPainteWeedStruct);
 
             Debug.Log("Start KDTree");
-            await m_weedTerrainBuilderV2.TerrainModel.BuildKDTree();
+            //await m_weedTerrainBuilderV2.TerrainModel.BuildKDTree();
             Debug.Log("End KDTree");
 
             this.ConstructGrassMesh(this.instance_count);

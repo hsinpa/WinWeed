@@ -40,12 +40,14 @@ namespace Hsinpa.Winweed
         private const int PHYSICS_HIT_MAX = 2;
         private RaycastHit[] physicsHits = new RaycastHit[PHYSICS_HIT_MAX];
         private float[] vector_cache = new float[3];
+        private bool kd_processing_flag = false;
 
         public void SetUp()
         {
             terrainModel = new TerrainModel(this.transform, layerMask, digitPrecision:1);
 
             if (terrainSRP != null) terrainModel.Load(terrainSRP.data);
+            terrainModel.BuildKDTree();
         }
 
         public void ProcessRaycast(Ray ray)
@@ -67,13 +69,31 @@ namespace Hsinpa.Winweed
             vector_cache[1] = center.y;
             vector_cache[2] = center.z;
 
-            var find_nodes = terrainModel.KDTree.RadialSearch(vector_cache, radius);
+            if (kd_processing_flag) return;
+
+            kd_processing_flag = true;
+
+            Task.Run(() =>
+            {
+                lock (terrainModel.dataSet)
+                {
+                    var find_nodes = terrainModel.KDTree.RadialSearch(vector_cache, radius);
+
+                    foreach (var node in find_nodes)
+                    {
+                        terrainModel.dataSet.Remove(node.Value);
+                    }
+
+                    kd_processing_flag = false;
+                }
+
+            });            
         }
 
         public void Save() {
             if (terrainModel == null || terrainSRP == null) return;
 
-            terrainSRP.Save(terrainModel.DataSet);
+            terrainSRP.Save(terrainModel.dataSet);
         }
 
         public WeedStatic.PaintedWeedStruct GetPainteWeedStruct() {
@@ -88,20 +108,27 @@ namespace Hsinpa.Winweed
 
             Matrix4x4 selfTransform = this.transform.localToWorldMatrix;
 
-            var dataset = terrainModel.DataSet;
+            var dataset = terrainModel.dataSet;
 
-            foreach (var d in dataset) {
-                Matrix4x4 data_matrix = selfTransform * d.Value.local_matrix ;
-                Vector3 world_normal = selfTransform * d.Value.normal;
+            try {
+                foreach (var d in dataset)
+                {
+                    Matrix4x4 data_matrix = selfTransform * d.Value.local_matrix;
+                    Vector3 world_normal = selfTransform * d.Value.normal;
 
-                Gizmos.color = Color.blue;
+                    Gizmos.color = Color.blue;
 
-                Vector3 targetPoint = data_matrix.GetPosition() + (world_normal * 0.1f);
-                Gizmos.DrawLine(data_matrix.GetPosition(), targetPoint);
-            }
-            
+                    Vector3 targetPoint = data_matrix.GetPosition() + (world_normal * 0.1f);
+                    Gizmos.DrawLine(data_matrix.GetPosition(), targetPoint);
+                }
+
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireCube(selfTransform.GetPosition() + terrainSRP.Bounds.center, terrainSRP.Bounds.size);
+            }
+            catch
+            {
+
+            }
         }
     }
 }
