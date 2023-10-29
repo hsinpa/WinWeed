@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using System;
+using static UnityEngine.InputSystem.InputAction;
+using Hsinpa.Utility;
 
 namespace Hsinpa.Winweed.EditorCode
 {
@@ -32,6 +34,10 @@ namespace Hsinpa.Winweed.EditorCode
             DrawDefaultInspector();
             builderV2 = (WeedTerrainBuilderV2)target;
 
+            if (builderV2.TerrainSRP == null && GUILayout.Button("Generate Terrain SRP")) {
+                GenerateNewTerrainSRP();
+            }
+
             //Set Painter related config
             if (_paintRadiusView != null) {
                 var painter_scale = _paintRadiusView.transform.localScale;
@@ -42,18 +48,19 @@ namespace Hsinpa.Winweed.EditorCode
 
         private void OnSceneGUI(SceneView sceneView)
         {
+            Event guiEvent = Event.current;
+
             if (builderV2.editorState != WeedTerrainBuilderV2.EditorState.Edit) return;
             
             SceneView.RepaintAll();
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
-            Event guiEvent = Event.current;
+            ProcessMouseInput(guiEvent);
 
-            Input(guiEvent);
         }
 
-        void Input(Event guiEvent)
+        void ProcessMouseInput(Event guiEvent)
         {
             if (builderV2 == null) return;
 
@@ -80,7 +87,6 @@ namespace Hsinpa.Winweed.EditorCode
             {
                 ProcessGroupRaycast(worldRay, max_ray_count: 50, contact_struct);
             }
-
         }
 
         private void ProcessGroupRaycast(Ray worldRay, int max_ray_count, RaycastContactStruct contact_struct) {
@@ -118,8 +124,7 @@ namespace Hsinpa.Winweed.EditorCode
 
         private RaycastContactStruct ProcessPaintRadiusDecay(Ray worldRay) {
             _raycastContactStruct.is_contact = false;
-            int hit_lens = Physics.RaycastNonAlloc(worldRay, physicsHits, maxDistance: 50);
-
+            int hit_lens = Physics.RaycastNonAlloc(worldRay, physicsHits, maxDistance: 50, layerMask: builderV2.LayerMask);
 
             if (hit_lens > 0)
             {
@@ -151,6 +156,23 @@ namespace Hsinpa.Winweed.EditorCode
             }
 
             _paintRadiusView.gameObject.SetActive(false);
+        }
+
+        private TerrainSRPV2 GenerateNewTerrainSRP() {
+            TerrainSRPV2 asset = ScriptableObject.CreateInstance<TerrainSRPV2>();
+
+            string srp_name = Guid.NewGuid().ToString() + ".asset";
+
+            IOUtility.CreateDirectoryIfNotExist(Application.dataPath, "WinWeed", "Data");
+            string name = UnityEditor.AssetDatabase.GenerateUniqueAssetPath(WeedStatic.Path.SRP_File_Path + srp_name);
+            AssetDatabase.CreateAsset(asset, name);
+            AssetDatabase.SaveAssets();
+
+            builderV2.SetTerrainSRP(asset);
+
+            EditorUtility.SetDirty(builderV2);
+
+            return asset;
         }
 
         private void OnEnable()

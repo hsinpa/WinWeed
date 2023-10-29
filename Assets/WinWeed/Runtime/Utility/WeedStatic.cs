@@ -5,6 +5,10 @@ using UnityEngine;
 namespace Hsinpa.Winweed {
     public class WeedStatic
     {
+        public class Path {
+            public const string SRP_File_Path = "Assets/WinWeed/Data/";
+        }
+
         public class ShaderProperties {
 
             //Bezier Curve

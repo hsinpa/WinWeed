@@ -266,11 +266,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
-  terrainSRP: {fileID: 11400000, guid: 644f63a4e0949d14d9c2dc62e813f7ab, type: 2}
-  paintEffectRange: 2.01
-  editorState: 2
-  paintState: 0
+    m_Bits: 64
+  terrainSRP: {fileID: 11400000, guid: 2848512411241974a8d4af88e165ad0c, type: 2}
+  paintEffectRange: 0.5
+  editorState: 1
+  paintState: 1
 --- !u!114 &1016554438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,15 +284,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ca543ab29cb976945b2127e071a00f76, type: 2}
-  instance_count: 25037
-  grass_height: 0.5
-  grass_width: 0.02
-  grass_sharpness: 0.3
+  instance_count: 49049
+  grass_height: 0.2
+  grass_width: 0.01
+  grass_sharpness: 0.2
   random_strength: 0.008
   wind_config:
-    wind_direction: {x: 0, y: 0, z: 0}
-    wind_strength: 0
-  wind_strength: 0.24
+    wind_direction: {x: 0.1, y: 0.1, z: 0.1}
+    wind_strength: 0.1
 --- !u!1 &1022144102
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,8 +382,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022144102}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.35031128, y: 0.1717209, z: 1.6248957}
-  m_LocalScale: {x: 2.01, y: 2.01, z: 2.01}
+  m_LocalPosition: {x: -1.9995178, y: 0.072123945, z: -0.707652}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -613,7 +612,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148371773244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.89, y: 0.15, z: -0.34}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -634,7 +633,7 @@ GameObject:
   - component: {fileID: 1016554430}
   - component: {fileID: 1016554434}
   - component: {fileID: 1016554438}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}

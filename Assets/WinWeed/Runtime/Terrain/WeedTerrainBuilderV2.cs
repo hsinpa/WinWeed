@@ -18,6 +18,7 @@ namespace Hsinpa.Winweed
     {
         [SerializeField]
         private LayerMask layerMask;
+        public LayerMask LayerMask => this.layerMask;
 
         [SerializeField]
         private TerrainSRPV2 terrainSRP;
@@ -52,7 +53,7 @@ namespace Hsinpa.Winweed
 
         public void ProcessRaycast(Ray ray)
         {
-            if (terrainModel != null && Physics.RaycastNonAlloc(ray, physicsHits, maxDistance: 50) > 0)
+            if (terrainModel != null && Physics.RaycastNonAlloc(ray, physicsHits, maxDistance: 50, layerMask: layerMask) > 0)
             {
                 //Debug.Log($"Ray origin {hitInfo.point}");
                 //Debug.Log($"Ray triangleIndex {hitInfo.triangleIndex}");
@@ -96,6 +97,11 @@ namespace Hsinpa.Winweed
             terrainSRP.Save(terrainModel.dataSet);
         }
 
+        public void SetTerrainSRP(TerrainSRPV2 terrainSRPV2 ) {
+            this.terrainSRP = terrainSRPV2;
+            SetUp();
+        }
+
         public WeedStatic.PaintedWeedStruct GetPainteWeedStruct() {
             int count = terrainSRP.data.Count;
             int random_point = UtilityFunc.RandomRange(0, count);
@@ -103,8 +109,8 @@ namespace Hsinpa.Winweed
             return default(WeedStatic.PaintedWeedStruct);
         }
 
-        public void OnDrawGizmos() {
-            if (terrainModel == null) return;
+        private void OnDrawGizmos() {
+            if (terrainModel == null || this.editorState == EditorState.Render) return;
 
             Matrix4x4 selfTransform = this.transform.localToWorldMatrix;
 
@@ -121,12 +127,20 @@ namespace Hsinpa.Winweed
                     Vector3 targetPoint = data_matrix.GetPosition() + (world_normal * 0.1f);
                     Gizmos.DrawLine(data_matrix.GetPosition(), targetPoint);
                 }
-
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireCube(selfTransform.GetPosition() + terrainSRP.Bounds.center, terrainSRP.Bounds.size);
             }
             catch
             {
+
+            }
+        }
+
+        private void OnDrawGizmosSelected() {
+            if (terrainModel == null) return;
+
+            try {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(this.transform.localToWorldMatrix.GetPosition() + terrainSRP.Bounds.center, terrainSRP.Bounds.size);
+            } catch {
 
             }
         }

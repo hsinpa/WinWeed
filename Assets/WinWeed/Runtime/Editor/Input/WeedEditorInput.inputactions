@@ -1,0 +1,34 @@
+{
+    "name": "WeedEditorInput",
+    "maps": [
+        {
+            "name": "Editor",
+            "id": "9c73c058-88d4-4954-abd2-d9788e2e6715",
+            "actions": [
+                {
+                    "name": "Switch_State",
+                    "type": "Button",
+                    "id": "3ccaa95c-9912-4939-be7a-73ca5c25e39c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9da07e07-6a9c-48b3-b769-9ceb3b42d71c",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch_State",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

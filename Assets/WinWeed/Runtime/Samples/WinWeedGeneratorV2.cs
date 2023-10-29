@@ -34,13 +34,9 @@ namespace Hsinpa.Winweed
         [SerializeField]
         private WeedStatic.WindConfig wind_config;
 
-        [SerializeField]
-        private float wind_strength;
-
         private const int SEGMENT = 2;
 
         private WeedTerrainBuilderV2 m_weedTerrainBuilderV2;
-
         private WeedGeneratorHelper m_weedGeneratorHelper;
         private MaterialPropertyBlock m_PropertyBlock;
 
