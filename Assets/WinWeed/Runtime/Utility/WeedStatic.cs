@@ -37,6 +37,32 @@ namespace Hsinpa.Winweed {
             public float wind_strength;
         }
 
+        public struct MeshProperties
+        {
+            public Matrix4x4 a_mat;
+            public Vector3 a_bezier_startpoint;
+            public Vector3 a_bezier_endpoint;
+            public Vector3 a_bezier_startctrl;
+            public Vector3 a_bezier_endctrl;
+            public float a_height;
+
+            public static int Size() {
+                return
+                    (sizeof(float) * 4 * 4) + // matrix;
+                    (sizeof(float) * 3 * 4) + // bezier;
+                    sizeof(float); // height;
+            }
+        }
+    
+        public class CullBlockStruct {
+            public int block_size;
+            public Vector3 block_position;
+
+            public List<MeshProperties> mesh_properties_list = new List<MeshProperties>();
+            public ComputeBuffer argsCommandBuffer;
+            public ComputeBuffer meshCommandBuffer;
+        }
+
         public class Color {
             public static Color32 EditColor = new Color32(124, 216, 243, 255);
             public static Color32 EraseColor = new Color32(214, 66, 82, 255);
